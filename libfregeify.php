@@ -27,7 +27,14 @@ function get_image_file($mathtext, $displayinline) {
     if (!isset($record->{$mathtext})) {
         $record->{$mathtext} = new StdClass();
     }
-    save_record();
+    $record->{$mathtext}->{$displayinline} = make_image(
+        $mathtext, $displayinline, $ctr
+    );
+    save_record($record);
+    if ($record->{$mathtext}->{$displayinline} == false) {
+        return 'fregeify_error.png';
+    }
+    return $record->{$mathtext}->{$displayinline};
 }
 
 function get_record() {
@@ -40,10 +47,9 @@ function get_record() {
     return new StdClass();
 }
 
-function makeimage($mathtext, $displayinline, $ctr) {
+function make_image($mathtext, $displayinline, $ctr) {
     global $image_extension;
-    $filename = 'images/fregeify' + strval($ctr) . '.' + $image_extension;
-    error_log('running makeimage');
+    $filename = 'images/fregeify' . strval($ctr) . '.' . $image_extension;
     return $filename;
 }
 
@@ -54,7 +60,6 @@ function save_record($rec) {
     file_put_contents('images/fregeifier-record.json',
         json_encode($rec, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
 }
-
 
 // initialize
 $record = get_record();

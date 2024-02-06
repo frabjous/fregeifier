@@ -10,7 +10,6 @@
 require_once('libfregeify.php');
 
 function fregeify_ast($obj, $active) {
-    error_log('calling with ' . json_encode($active));
     if (is_object($obj)) {
         // see if do a change
         if (($active) && isset($obj->t) && ($obj->t == 'Math')) {
