@@ -27,6 +27,8 @@ if (isset($obj->meta->{'header-includes'})) {
 
 file_put_contents('/home/kck/tmp/eh.txt', $extra_headers);
 
+$obj = fregeify_ast($obj, false);
+
 file_put_contents('/home/kck/tmp/post.json', json_encode($obj,
     JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
 
