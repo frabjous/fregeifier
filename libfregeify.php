@@ -47,6 +47,25 @@ function get_record() {
     return new StdClass();
 }
 
+function get_template() {
+    $env_location = getenv('FREGEIFIER_TEMPLATE') ?? '';
+    if (($env_location != '') && file_exists($env_location)) {
+        return file_get_contents($env_location);
+    }
+    if (file_exists('./fregeifier-template.tex')) {
+        return file_get_contents('./fregeifier-template.tex');
+    }
+    $try = getenv("HOME") . '/.config/fregeifier/fregeifier-template.tex';
+    if (file_exists($try)) {
+        return file_get_contents($try);
+    }
+    $try = dirname(__FILE__) . '/default-template.tex';
+    if (file_exists($try)) {
+        return file_get_contents($try);
+    }
+    return false;
+}
+
 function make_image($mathtext, $displayinline, $ctr) {
     global $image_extension;
     $filename = 'images/fregeify' . strval($ctr) . '.' . $image_extension;
@@ -64,4 +83,8 @@ function save_record($rec) {
 // initialize
 $record = get_record();
 $image_extension = 'svg';
-
+$template = get_template();
+if ($template === false) {
+    rage_quit('Cannot find Fregeifier template to use.');
+}
+error_log($template);

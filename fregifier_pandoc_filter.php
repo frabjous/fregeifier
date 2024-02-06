@@ -42,4 +42,6 @@ file_put_contents('/home/kck/tmp/post.json', json_encode($obj,
     JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
 
 
+error_log(getenv('FREGE'));
+
 echo json_encode($obj, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
