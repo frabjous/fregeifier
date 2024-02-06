@@ -1,11 +1,11 @@
 <?php
 
-// TODO fix this
-function get_image_file($mathtext) {
-    return 'image.svg';
-}
+require_once('libfregeify.php');
+
+
 
 function fregeify_ast($obj, $active) {
+    error_log('calling with ' . json_encode($active));
     if (is_object($obj)) {
         // see if do a change
         if (($active) && isset($obj->t) && ($obj->t == 'Math')) {
@@ -24,19 +24,20 @@ function fregeify_ast($obj, $active) {
             if (!is_string($c[1])) {
                 return $obj;
             }
-            $displaymath = true;
+            $displayinline = 'display';
             if (is_object($c[0]) && isset($c[0]->t) &&
                 (str_contains($c[0]->t, 'Inline'))) {
-                $displaymath = false;
+                $displayinline = 'inline';
             }
             // get image for text
             $math_text = $c[1];
-            $img_file = get_image_file($math_text);
+            $img_file = get_image_file($math_text, $displayinline);
             // create image object
             $newobj = new StdClass();
             $newobj->t = 'Image';
             $newobj->c = array();
-            array_push($newobj->c, array('',array(),array()));
+            array_push($newobj->c, array('',array('fregeified-math',
+                $displayinline),array()));
             array_push($newobj->c, array());
             array_push($newobj->c, array($img_file, ''));
             return $newobj;
@@ -52,7 +53,7 @@ function fregeify_ast($obj, $active) {
         // make it active
         if ((count($obj) > 0) &&
             (is_array($obj[0])) &&
-            (count($obj[0] > 1))) {
+            (count($obj[0]) > 1)) {
             $classes = $obj[0][1];
             foreach($classes as $cl) {
                 if (str_contains($cl, 'fregeify') || str_contains($cl, 'fregify')) {
