@@ -1,5 +1,12 @@
 #!/usr/bin/env php
 <?php
+// LICENSE: GNU GPL v3 You should have received a copy of the GNU General
+// Public License along with this program. If not, see
+// https://www.gnu.org/licenses/.
+
+////////////// fregeifier_pandoc_filter.php /////////////////
+// Pandoc filter for use with pandoc --filter option       //
+/////////////////////////////////////////////////////////////
 
 function rage_quit($msg) {
     fwrite(STDERR, $msg . PHP_EOL);

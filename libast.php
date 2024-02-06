@@ -1,8 +1,13 @@
 <?php
+// LICENSE: GNU GPL v3 You should have received a copy of the GNU General
+// Public License along with this program. If not, see
+// https://www.gnu.org/licenses/.
+
+////////////// libast.php ///////////////////////////////////
+// Functions for modifying/reading pandoc ASTs             //
+/////////////////////////////////////////////////////////////
 
 require_once('libfregeify.php');
-
-
 
 function fregeify_ast($obj, $active) {
     error_log('calling with ' . json_encode($active));
