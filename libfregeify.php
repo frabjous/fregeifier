@@ -11,8 +11,8 @@
 // NOTE: should be loaded after navigating to correct directory
 
 function clean_up() {
-    foreach(glob('fregeifier-temporary-file*') as $file) {
-        unlink($file);
+    foreach(glob('fregeifier_temporary_file*') as $file) {
+        //unlink($file);
     }
 }
 
@@ -104,7 +104,7 @@ function make_image($mathtext, $displayinline, $ctr) {
     }
     // compile LaTeX to PDF
     $comp_result = pipe_to_command(
-        $latexcmd . ' -jobname=fregeifier-temporary-file',
+        $latexcmd . ' -jobname=fregeifier_temporary_file',
         $latex_code
     );
     if ($comp_result->returnvalue != 0) {
@@ -136,14 +136,15 @@ function make_image($mathtext, $displayinline, $ctr) {
         return false;
     }
     // convert to desired format
-    $mutool_cmd = 'mutool draw -F ' . $image_extension . '-o -';
+    $mutool_cmd = 'mutool draw -F ' . $image_extension . ' -o -';
     if ($image_extension != 'svg') {
         $mutool_cmd .= '-r 300';
     }
     $mutool_cmd .= ' "fregeifier_temporary_file_cropped.pdf" 1 > ';
-    $mutool_cmd .= '"' , $filename . '"';
+    $mutool_cmd .= '"' . $filename . '"';
+    error_log($mutool_cmd);
     $convert_result = pipe_to_command($mutool_cmd, '');
-    if (!$convert_result->returnvalue != 0) {
+    if ($convert_result->returnvalue != 0) {
         clean_up();
         error_log('Fregeifier error when converting image.' . PHP_EOL .
             $convert_result->stderr . PHP_EOL);
@@ -200,4 +201,3 @@ $template = get_template();
 if ($template === false) {
     rage_quit('Cannot find Fregeifier template to use.');
 }
-error_log($template);

@@ -13,10 +13,9 @@ function rage_quit($msg) {
     exit(1);
 }
 
+// read json from stdin
 $stdin = file_get_contents('php://stdin');
-
 $obj = json_decode($stdin) ?? false;
-
 if (!$obj) {
     rage_quit('Could not decode JSON object from standard in.');
 }
@@ -27,7 +26,6 @@ require_once('libast.php');
 
 // try to read image extension from pandoc command
 $reader_options = json_decode(getenv('PANDOC_READER_OPTIONS') ?? '') ?? false;
-
 if ($reader_options !== false) {
     if (isset($reader_options->{'default-image-extension'})) {
         if ($reader_options->{'default-image-extension'} != '') {
@@ -36,24 +34,16 @@ if ($reader_options !== false) {
     }
 }
 
-file_put_contents('/home/kck/tmp/pre.json', json_encode($obj,
-    JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
-
-
+// read header includes for extra LaTeX packages
 $extra_headers = '';
 if (isset($obj->meta->{'header-includes'})) {
     $extra_headers = get_extra_headers($obj->meta->{'header-includes'}, '');
 }
 
+// apply changes to document
 if (isset($obj->blocks)) {
     $obj->blocks = fregeify_ast($obj->blocks, false);
 }
 
-
-
-file_put_contents('/home/kck/tmp/post.json', json_encode($obj,
-    JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
-
-error_log('IMAGE EXT: ' . $image_extension);
-
+// output new ast json encoded
 echo json_encode($obj, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
