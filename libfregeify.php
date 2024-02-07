@@ -19,7 +19,8 @@ function clean_up() {
 function fill_template($template, $vals) {
     $doc = $template;
     foreach($vals as $key => $v) {
-        $doc = preg_replace('/%\s*FREGEIFIER:' . $key . '/', $v, $doc);
+        error_log('key ' . $key . ' val ' . $v);
+        $doc = str_replace('% FREGEIFIER:' . $key, $v, $doc);
     }
     return $doc;
 }
@@ -81,6 +82,9 @@ function get_template() {
 }
 
 function make_image($mathtext, $displayinline, $ctr) {
+    if (!is_dir('images')) {
+        mkdir('images',0755,true);
+    }
     global $image_extension, $template, $extra_headers;
     $filename = 'images/fregeify' . strval($ctr) . '.' . $image_extension;
     // wrap math LaTeX code with proper delimiter
@@ -142,7 +146,6 @@ function make_image($mathtext, $displayinline, $ctr) {
     }
     $mutool_cmd .= ' "fregeifier_temporary_file_cropped.pdf" 1 > ';
     $mutool_cmd .= '"' . $filename . '"';
-    error_log($mutool_cmd);
     $convert_result = pipe_to_command($mutool_cmd, '');
     if ($convert_result->returnvalue != 0) {
         clean_up();
