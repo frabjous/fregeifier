@@ -153,7 +153,7 @@ function make_image($mathtext, $displayinline, $ctr) {
     // convert to desired format
     $mutool_cmd = 'mutool draw -F ' . $image_extension . ' -o -';
     if ($image_extension != 'svg') {
-        $mutool_cmd .= ' -r 300';
+        $mutool_cmd .= ' -r 100';
     }
     $mutool_cmd .= ' "fregeifier_temporary_file_cropped.pdf" 1 > ';
     $mutool_cmd .= '"' . $filename . '"';
