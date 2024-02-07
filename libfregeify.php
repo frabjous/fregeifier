@@ -10,6 +10,14 @@
 
 // NOTE: should be loaded after navigating to correct directory
 
+function fill_template($template, $vals) {
+    $doc = $template;
+    foreach($vals as $key => $v) {
+        $doc = preg_replace('/%\s*FREGEIFIER:' . $key . '/', $v, $doc);
+    }
+    return $doc;
+}
+
 function get_image_file($mathtext, $displayinline) {
     global $record;
     // if already there, just return what we have
@@ -69,6 +77,12 @@ function get_template() {
 function make_image($mathtext, $displayinline, $ctr) {
     global $image_extension;
     $filename = 'images/fregeify' . strval($ctr) . '.' . $image_extension;
+    if ($displayinline == 'display') {
+        $mathtext = '\\[' . PHP_EOL . $mathtext . PHP_EOL . '\\]';
+    }
+    if ($displayinline == 'inline') {
+        $mathtext = '\\(' . $mathtext . '\\)';
+    }
     return $filename;
 }
 
