@@ -10,6 +10,12 @@
 
 // NOTE: should be loaded after navigating to correct directory
 
+function clean_up() {
+    foreach(glob('fregeifier-temporary-file*') as $file) {
+        unlink($file);
+    }
+}
+
 function fill_template($template, $vals) {
     $doc = $template;
     foreach($vals as $key => $v) {
@@ -75,15 +81,70 @@ function get_template() {
 }
 
 function make_image($mathtext, $displayinline, $ctr) {
-    global $image_extension;
+    global $image_extension, $template, $extra_headers;
     $filename = 'images/fregeify' . strval($ctr) . '.' . $image_extension;
+    // wrap math LaTeX code with proper delimiter
     if ($displayinline == 'display') {
-        $mathtext = '\\[' . PHP_EOL . $mathtext . PHP_EOL . '\\]';
+        $mathtext = '\\[' . $mathtext . '\\]';
     }
     if ($displayinline == 'inline') {
         $mathtext = '\\(' . $mathtext . '\\)';
     }
+    // create LaTeX document code from template
+    $latex_code = fill_template($template, array(
+        "HEADERINCLUDES"=>$extra_headers,
+        "MATHTEXT"=>$mathtext
+    ));
+    $latexcmd = 'pdflatex';
+    if (str_contains($latex_code, 'xelatex')) {
+        $latexcmd = 'xelatex';
+    }
+    if (str_contains($latex_code, 'lualatex')) {
+        $latexcmd = 'lualatex';
+    }
+    // compile LaTeX to PDF
+    $comp_result = pipe_to_command(
+        $latexcmd . ' -jobname=fregeifier-temporary-file',
+        $latex_code
+    );
+    if ($comp_result->return_value != 0) {
+        clean_up();
+        error_log('Fregeifier unable to compile LaTeX:' .
+                PHP_EOL . $comp_result->stderr . PHP_EOL);
+        return false;
+    }
+    if (!file_exists('fregeifier_temporary_file
+    // crop PDF
+
+    error_log($latex_code);
     return $filename;
+}
+
+function pipe_to_command($cmd, $pipe_text) {
+   $rv = new StdClass();
+
+   $descriptorspec = array(
+      0 => array("pipe", "r"), // stdin
+      1 => array("pipe", "w"), // stdout
+      2 => array("pipe", "w")  // stderr
+   );
+
+   $process = proc_open($cmd, $descriptorspec, $pipes);
+
+   if (is_resource($process)) {
+      fwrite($pipes[0], $pipe_text);
+      fclose($pipes[0]);
+
+      $rv->stdout = stream_get_contents($pipes[1]);
+      $rv->stderr = stream_get_contents($pipes[2]);
+      fclose($pipes[1]);
+      fclose($pipes[2]);
+
+      $rv->returnvalue = proc_close($process);
+
+   }
+   return $rv;
+
 }
 
 function save_record($rec) {
