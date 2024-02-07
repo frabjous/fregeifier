@@ -107,16 +107,54 @@ function make_image($mathtext, $displayinline, $ctr) {
         $latexcmd . ' -jobname=fregeifier-temporary-file',
         $latex_code
     );
-    if ($comp_result->return_value != 0) {
+    if ($comp_result->returnvalue != 0) {
         clean_up();
         error_log('Fregeifier unable to compile LaTeX:' .
                 PHP_EOL . $comp_result->stderr . PHP_EOL);
         return false;
     }
-    if (!file_exists('fregeifier_temporary_file
+    if (!file_exists('fregeifier_temporary_file.pdf')) {
+        clean_up();
+        error_log('Fregeifier intermediate PDF not found.' . PHP_EOL);
+        return false;
+    }
     // crop PDF
-
-    error_log($latex_code);
+    $crop_result = pipe_to_command(
+        'pdfcrop "fregeifier_temporary_file.pdf" ' .
+            '"fregeifier_temporary_file_cropped.pdf"',
+        ''
+    );
+    if ($crop_result->returnvalue !=0) {
+        clean_up();
+        error_log('Fregeifier error when cropping PDF.'. PHP_EOL .
+            $crop_result->stderr . PHP_EOL);
+        return false;
+    }
+    if (!file_exists('fregeifier_temporary_file_cropped.pdf')) {
+        clean_up();
+        error_log('Fregeifier cropped PDF not found.' . PHP_EOL);
+        return false;
+    }
+    // convert to desired format
+    $mutool_cmd = 'mutool draw -F ' . $image_extension . '-o -';
+    if ($image_extension != 'svg') {
+        $mutool_cmd .= '-r 300';
+    }
+    $mutool_cmd .= ' "fregeifier_temporary_file_cropped.pdf" 1 > ';
+    $mutool_cmd .= '"' , $filename . '"';
+    $convert_result = pipe_to_command($mutool_cmd, '');
+    if (!$convert_result->returnvalue != 0) {
+        clean_up();
+        error_log('Fregeifier error when converting image.' . PHP_EOL .
+            $convert_result->stderr . PHP_EOL);
+        return false;
+    }
+    if (!file_exists($filename)) {
+        clean_up();
+        error_log('Fregeifier result file not found.' . PHP_EOL);
+        return false;
+    }
+    clean_up();
     return $filename;
 }
 
