@@ -33,6 +33,8 @@ if ($reader_options !== false) {
         }
     }
 }
+    file_put_contents('/home/kck/tmp/ie.json',json_encode($reader_options));
+
 
 // read header includes for extra LaTeX packages
 $extra_headers = '';
