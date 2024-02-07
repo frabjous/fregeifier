@@ -42,7 +42,10 @@ function fregeify_ast($obj, $active) {
             $newobj->c = array();
             array_push($newobj->c, array('',array('fregeified-math',
                 $displayinline),array()));
-            array_push($newobj->c, array());
+            $alttext_obj = new StdClass();
+            $alttext_obj->t = 'Str';
+            $alttext_obj->c = $math_text;
+            array_push($newobj->c, array($alttext_obj));
             array_push($newobj->c, array($img_file, ''));
             return $newobj;
         }
