@@ -26,30 +26,41 @@ function fill_template($template, $vals) {
 }
 
 function get_image_file($mathtext, $displayinline) {
-    global $record;
+    global $record, $image_extension;
     // if already there, just return what we have
-    if (isset($record->{$mathtext}->{$displayinline})) {
-        if (file_exists($record->{$mathtext}->{$displayinline})) {
-            return $record->{$mathtext}->{$displayinline};
+    if (isset($record->{$mathtext}->
+                {$displayinline}->{$image_extension})) {
+        if (file_exists($record->{$mathtext}
+                    ->{$displayinline}->{$image_extension})) {
+            return $record->{$mathtext}->
+                {$displayinline}->{$image_extension};
         }
     }
+    // image gets next number after counter
     $ctr=0;
     if (isset($record->counter)) {
         $ctr = $record->counter;
     }
     $ctr++;
+    // create holder objects if need be
     $record->counter = $ctr;
     if (!isset($record->{$mathtext})) {
         $record->{$mathtext} = new StdClass();
     }
-    $record->{$mathtext}->{$displayinline} = make_image(
+    if (!isset($record->{$mathtext}->{$displayinline})) {
+        $record->{$mathtext}->{$displayinline} =
+            new StdClass();
+    }
+    // create new image and record its filename
+    $record->{$mathtext}->{$displayinline}->
+        {$image_extension} = make_image(
         $mathtext, $displayinline, $ctr
     );
     save_record($record);
     if ($record->{$mathtext}->{$displayinline} == false) {
         return 'fregeify_error.png';
     }
-    return $record->{$mathtext}->{$displayinline};
+    return $record->{$mathtext}->{$displayinline}->{$image_extension};
 }
 
 function get_record() {
