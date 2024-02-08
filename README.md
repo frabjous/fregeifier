@@ -149,6 +149,8 @@ It should also make it easy to use to create images compatible with inclusion in
 
 Eventually, I hope to create a web interface for download such images, and a mechanism for inserting complex or unusual mathematics into webpages just with a url, or some javascript insertion. This should supplement tools such as MathJaX, KaTeX, etc., but be able to handle all possible LaTeX code, not just what is supported by more limited tools.
 
+PHP was chosen as the programming language to make setting up the web interface easy.
+
 ## License
 
 Copyright 2024 © [Kevin C. Klement](https://people.umass.edu/klement). This is free software, which can be redistributed and/or modified under the terms of the [GNU General Public License (GPL), version 3](https://www.gnu.org/licenses/gpl.html).
