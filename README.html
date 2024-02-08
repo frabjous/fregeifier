@@ -295,11 +295,42 @@ LaTeX tooling in non-LaTeX based documents. However, the Fregeifier is
 not limited to Frege notation, but can be used for any complex math
 environments for which LaTeX tools exist but cannot be currently handled
 by pandoc by itself.</p>
-<h2 id="pandoc-filter">Pandoc filter</h2>
+<h2 id="requirements">Requirements</h2>
+<p>The Fregeifier has only been tested on linux, but may work on other
+unix-like environments.</p>
+<p>The Fregeifier requires <a href="https://www.php.net/">php</a>, a TeX
+distribution such as <a href="https://tug.org/texlive/">texlive</a>, the
+<a href="https://www.mankier.com/1/mutool">mutool</a> program from the
+MuPDF project, and of course <a href="https://pandoc.org">pandoc</a> to
+use the pandoc filter.</p>
+<h2 id="installation">Installation</h2>
+<p>Clone this repository to a directory of your choosing (here
+<code>/path/to/repos</code>):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path/to/repos</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--depth</span> 1 https://github.com/frabjous/fregeifier</span></code></pre></div>
+<p>If permissions were not preserved in the cloning, you will need to
+make the pandoc filter executable:</p>
+<pre class="ah"><code>chmod a+x /path/to/repos/fregeifier/fregeifier_pandoc_filter.php</code></pre>
+<h2 id="using-the-pandoc-filter">Using the pandoc filter</h2>
 <p>For background, see pandoc’s documentation on <a href="https://pandoc.org/filters.html">(json) filters</a>.</p>
 <p>The filter can be called using the <code>--filter</code> command line
 option to pandoc, e.g.:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">--filter</span> /path/to/repo/fregeifier/fregeifier_pandoc_filter.php mydocument.md <span class="at">-o</span> mydocument.html</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">--filter</span> /path/to/repos/fregeifier/fregeifier_pandoc_filter.php <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    mydocument.md <span class="at">-o</span> mydocument.html</span></code></pre></div>
+<p>For the filter to have any effect when applied to a markdown input
+document, parts of the document containing either inline or
+block/display mathematics must be given the <code>.fregeify</code> css
+class, e.g.:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Here is some inline math, like <span class="co">[</span><span class="ot">$2 + 2 = 4$</span><span class="co">]</span>{.fregeify},</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>with the class applied</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>Below is some display math with the class applied.</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>:::{.fregeify}</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>5 + 7 = 12</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div>
 <h2 id="license">License</h2>
 <p>Copyright 2024 © <a href="https://people.umass.edu/klement">Kevin C.
 Klement</a>. This is free software, which can be redistributed and/or
