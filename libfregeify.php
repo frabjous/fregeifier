@@ -12,14 +12,13 @@
 
 function clean_up() {
     foreach(glob('fregeifier_temporary_file*') as $file) {
-        //unlink($file);
+        unlink($file);
     }
 }
 
 function fill_template($template, $vals) {
     $doc = $template;
     foreach($vals as $key => $v) {
-        error_log('key ' . $key . ' val ' . $v);
         $doc = str_replace('% FREGEIFIER:' . $key, $v, $doc);
     }
     return $doc;
