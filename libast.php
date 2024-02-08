@@ -63,6 +63,9 @@ function fregeify_ast($obj, $active) {
             (count($obj[0]) > 1)) {
             $classes = $obj[0][1];
             foreach($classes as $cl) {
+                if (!is_string($cl)) {
+                    continue;
+                }
                 if (str_contains($cl, 'fregeify') || str_contains($cl, 'fregify')) {
                     $active = true;
                 }
