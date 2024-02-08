@@ -1,0 +1,21 @@
+.fregeify svg {
+    transform: scale(1);
+}
+div.fregeify {
+    text-align: center;
+}
+span.fregeify {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 1.5px;
+    margin-left: 1.5px;
+}
+span.fregeify.top {
+    display: inline-block;
+    vertical-align: text-top;
+}
+span.fregeify.bottom {
+    display: inline-block;
+    vertical-align: baseline;
+}
+

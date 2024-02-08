@@ -5,11 +5,11 @@
 
 The Fregeifier is a collection of tools for rendering unusual mathematics in documents and webpages, including things such Gottlob Frege’s logical notation or that of Russell and Whitehead’s *Principia Mathematica*.
 
-It is currently early in development. What has been finished so far is an early version of a filter for [pandoc](https://pandoc.org) that allow only a selected subset of LaTeX-coded mathematics in a markdown document, when converted to HTML or an HTML-based format, to be rendered as images created by converting the output of processing the mathematics by means of a LaTeX engine. See the [roadmap](#roadmap-and-todo) below for additional planned features.
+It is currently early in development. What has been finished so far is an early version of a filter for [pandoc](https://pandoc.org) that allows a selected subset of LaTeX-coded mathematics in a markdown document, when converted to HTML or an HTML-based format, to be rendered as images created by converting the output of processing the mathematics by means of a full-featured LaTeX engine. See the [roadmap](#roadmap-and-todo) below for additional planned features.
 
-The name of the project came from the need for easy inclusion of Gottlob Frege's logical notation in non-LaTeX based documents, but by means of making use of the existing LaTeX tooling. However, the Fregeifier is not limited to Frege notation, but can be used for any complex math environments for which LaTeX tools exist, but cannot be currently handled directly by programs such as pandoc as is.
+The name of the project came from the need for easy inclusion of Gottlob Frege's logical notation in non-LaTeX based documents, but still making use of the existing LaTeX tooling. However, the Fregeifier is not limited to Frege notation, but can be used for any complex math environments for which LaTeX tools exist, but cannot be currently handled directly by programs such as pandoc as-is.
 
-It was originally developed for [The Journal for the History of Analytical Philosophy](https://jhaponline.org) and integrates easily with the [Open Guide Typesetting Framework](https://github.com/frabjous/open-guide-typesetting-framework) and [Open Guide Editor](https://github.com/frabjous/open-guide-typesetting-framework) it uses, which I also created, though it may be used independently.
+It was originally developed for [The Journal for the History of Analytical Philosophy](https://jhaponline.org) and integrates easily with the [Open Guide Typesetting Framework](https://github.com/frabjous/open-guide-typesetting-framework) and [Open Guide Editor](https://github.com/frabjous/open-guide-editor) it uses, which I also created, though it may be used independently.
 
 ## Requirements
 
@@ -101,6 +101,10 @@ Here the [LaTeX grundgesetze package](https://ctan.org/pkg/grundgesetze?lang=en)
 
 A custom template can be used to always load certain packages for a local installation. See [below](#custom-templates).
 
+## Recommended CSS
+
+The `recommended.css` file is a stylesheet with settings recommended for use with the Fregeifier and its pandoc filter. This CSS can be added to the output of pandoc with its `--css` option, or copied into a pandoc template. The additional classes `.top` and `.bottom` may be used to aid in the vertical positioning of inline fregeified images when combined with the `.fregeify` class, as opposed to the default middle alignment, for example.
+
 ## How it works
 
 The LaTeX math code extracted from the environment by pandoc is processed by the filter to create a minimal LaTeX document. That document is then processed by LaTeX into PDF, the PDF is cropped by the `pdfcrop` utility of TeXlive, and then `mutool` is used to convert the PDF page to the output format. The images will be placed in an `images` subfolder of the active directory. It is usually best to run pandoc from the same directory as your source document.
@@ -133,9 +137,9 @@ and
 
 When processing "fregeified" math, the former will be replaced by any TeX-specific `header-includes:` content, and the latter by the LaTeX code used in the math.
 
-Templates are fussy. There must be exactly one space between the `%` and the words in the template.
+Templates are fussy. There must be exactly one space between the “`%`” and the “`F`”.
 
-The file `default-template.tex` can be consulted for comparison, and/or directly copied and modified to suits one’s needs (e.g., specify different math fonts, etc.)
+The file `default-template.tex` can be consulted for comparison, and/or directly copied and modified to suits one’s needs (e.g., specify different math fonts, always load certain packages, etc.)
 
 ## Roadmap and TODO
 
