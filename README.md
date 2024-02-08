@@ -7,7 +7,7 @@ The Fregeifier is a collection of tools for rendering unusual mathematics in doc
 
 It is currently early in development. What has been finished so far is an early version of a filter for [pandoc](https://pandoc.org) that allow only a selected subset of LaTeX-coded mathematics in a markdown document, when converted to HTML or an HTML-based format, to be rendered as images created by converting the output of processing the mathematics by means of a LaTeX engine. See the [roadmap](#roadmap-and-todo) below for additional planned features.
 
-The name of the project, and its initial use case, involved easy inclusion of Gottlob Frege's logical notation making use of the existing LaTeX tooling in non-LaTeX based documents. However, the Fregeifier is not limited to Frege notation, but can be used for any complex math environments for which LaTeX tools exist but cannot be currently handled by pandoc by itself.
+The name of the project came from the need for easy inclusion of Gottlob Frege's logical notation in non-LaTeX based documents, but by means of making use of the existing LaTeX tooling. However, the Fregeifier is not limited to Frege notation, but can be used for any complex math environments for which LaTeX tools exist, but cannot be currently handled directly by programs such as pandoc as is.
 
 It was originally developed for [The Journal for the History of Analytical Philosophy](https://jhaponline.org) and integrates easily with the [Open Guide Typesetting Framework](https://github.com/frabjous/open-guide-typesetting-framework) and [Open Guide Editor](https://github.com/frabjous/open-guide-typesetting-framework) it uses, which I also created, though it may be used independently.
 
@@ -16,6 +16,8 @@ It was originally developed for [The Journal for the History of Analytical Philo
 The Fregeifier has only been tested on linux, but may work on other unix-like environments.
 
 The Fregeifier requires [php](https://www.php.net/), a TeX distribution such as [texlive](https://tug.org/texlive/), the [mutool](https://www.mankier.com/1/mutool) program from the MuPDF project, and of course [pandoc](https://pandoc.org) to use the pandoc filter.
+
+A big thanks to the developers of all these (open source) tools.
 
 ## Installation
 
@@ -129,11 +131,11 @@ and
 % FREGEIFIER:MATHTEXT
 ```
 
-When processing a "fregeified" math environment, the former will be replaced by any TeX-specific `header-includes:` content, and the latter by the LaTeX code used in the math fragment.
+When processing "fregeified" math, the former will be replaced by any TeX-specific `header-includes:` content, and the latter by the LaTeX code used in the math.
 
-There must be exactly one space between the `%` and the words in the template.
+Templates are fussy. There must be exactly one space between the `%` and the words in the template.
 
-The file `default-template.tex` can be consulted for comparison, and/or directly copied and modified.
+The file `default-template.tex` can be consulted for comparison, and/or directly copied and modified to suits one’s needs (e.g., specify different math fonts, etc.)
 
 ## Roadmap and TODO
 
@@ -141,11 +143,9 @@ Eventually, the Fregeifier should offer more than just a pandoc filter.
 
 It should also make it easy to use to create images compatible with inclusion in other file formats, such as `.docx`, `.odt` and similar.
 
-Eventually, I hope to create a web interface for download such images, and a mechanism for inserting complex or unusual mathematics into webpages just with a url, or some javascript insertion. This should supplement tools such as MathJax or KaTeX but be able to handle all possible LaTeX code, not just what is supported by more limited tools.
+Eventually, I hope to create a web interface for download such images, and a mechanism for inserting complex or unusual mathematics into webpages just with a url, or some javascript insertion. This should supplement tools such as MathJaX, KaTeX, etc., but be able to handle all possible LaTeX code, not just what is supported by more limited tools.
 
 ## License
 
 Copyright 2024 © [Kevin C. Klement](https://people.umass.edu/klement). This is free software, which can be redistributed and/or modified under the terms of the [GNU General Public License (GPL), version 3](https://www.gnu.org/licenses/gpl.html).
-
-A big thank you to John MacFarlane and the other pandoc developers.
 

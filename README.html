@@ -291,12 +291,12 @@ HTML or an HTML-based format, to be rendered as images created by
 converting the output of processing the mathematics by means of a LaTeX
 engine. See the <a href="#roadmap-and-todo">roadmap</a> below for
 additional planned features.</p>
-<p>The name of the project, and its initial use case, involved easy
-inclusion of Gottlob Frege’s logical notation making use of the existing
-LaTeX tooling in non-LaTeX based documents. However, the Fregeifier is
-not limited to Frege notation, but can be used for any complex math
-environments for which LaTeX tools exist but cannot be currently handled
-by pandoc by itself.</p>
+<p>The name of the project came from the need for easy inclusion of
+Gottlob Frege’s logical notation in non-LaTeX based documents, but by
+means of making use of the existing LaTeX tooling. However, the
+Fregeifier is not limited to Frege notation, but can be used for any
+complex math environments for which LaTeX tools exist, but cannot be
+currently handled directly by programs such as pandoc as is.</p>
 <p>It was originally developed for <a href="https://jhaponline.org">The
 Journal for the History of Analytical Philosophy</a> and integrates
 easily with the <a href="https://github.com/frabjous/open-guide-typesetting-framework">Open
@@ -311,6 +311,7 @@ distribution such as <a href="https://tug.org/texlive/">texlive</a>, the
 <a href="https://www.mankier.com/1/mutool">mutool</a> program from the
 MuPDF project, and of course <a href="https://pandoc.org">pandoc</a> to
 use the pandoc filter.</p>
+<p>A big thanks to the developers of all these (open source) tools.</p>
 <h2 id="installation">Installation</h2>
 <p>Clone this repository to a directory of your choosing (here
 <code>/path/to/repos</code>):</p>
@@ -410,23 +411,24 @@ intermediate PDFs; otherwise <code>pdflatex</code> is used.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">% FREGEIFIER:HEADERINCLUDES</span></span></code></pre></div>
 <p>and</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">% FREGEIFIER:MATHTEXT</span></span></code></pre></div>
-<p>When processing a “fregeified” math environment, the former will be
-replaced by any TeX-specific <code>header-includes:</code> content, and
-the latter by the LaTeX code used in the math fragment.</p>
-<p>There must be exactly one space between the <code>%</code> and the
-words in the template.</p>
+<p>When processing “fregeified” math, the former will be replaced by any
+TeX-specific <code>header-includes:</code> content, and the latter by
+the LaTeX code used in the math.</p>
+<p>Templates are fussy. There must be exactly one space between the
+<code>%</code> and the words in the template.</p>
 <p>The file <code>default-template.tex</code> can be consulted for
-comparison, and/or directly copied and modified.</p>
+comparison, and/or directly copied and modified to suits one’s needs
+(e.g., specify different math fonts, etc.)</p>
 <h2 id="roadmap-and-todo">Roadmap and TODO</h2>
 <p>Eventually, the Fregeifier should offer more than just a pandoc
 filter.</p>
 <p>It should also make it easy to use to create images compatible with
-other file formats, such as <code>.docx</code>, <code>.odt</code> and
-similar.</p>
+inclusion in other file formats, such as <code>.docx</code>,
+<code>.odt</code> and similar.</p>
 <p>Eventually, I hope to create a web interface for download such
 images, and a mechanism for inserting complex or unusual mathematics
 into webpages just with a url, or some javascript insertion. This should
-supplement tools such as MathJax or KaTeX but be able to handle all
+supplement tools such as MathJaX, KaTeX, etc., but be able to handle all
 possible LaTeX code, not just what is supported by more limited
 tools.</p>
 <h2 id="license">License</h2>
@@ -434,7 +436,5 @@ tools.</p>
 Klement</a>. This is free software, which can be redistributed and/or
 modified under the terms of the <a href="https://www.gnu.org/licenses/gpl.html">GNU General Public License
 (GPL), version 3</a>.</p>
-<p>A big thank you to John MacFarlane and the other pandoc
-developers.</p>
 </body>
 </html>
