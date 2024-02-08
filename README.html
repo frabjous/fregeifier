@@ -331,6 +331,38 @@ class, e.g.:</p>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>5 + 7 = 12</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div>
+<p>These math environments will be processed by LaTeX, converted to
+small images, and inserted into the document at the specified places.
+Mathematics environments not so marked with the <code>.fregeify</code>
+class should be unaffected.</p>
+<p>Most likely, however, you don’t need to use this on boring math like
+“5 + 7 = 12” which can easily be rendered as regular text. The main use
+of the filter is to be able to call upon commands from unusual LaTeX
+packages. The filter will look for pandoc-compliant (yaml) metadata in
+the document containing code to include additional LaTeX packages in the
+header, which typically takes the following form:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">header-includes:</span><span class="co"> |</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    \usepackage{grundgesetze,fge}</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">...</span></span></code></pre></div>
+<p>These packages will be available then not just if the markdown
+document is processed to PDF by a LaTeX engine, but also when the filter
+creates the small images.</p>
+<p>So a small complete document might look like this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="an">header-includes:</span><span class="co"> |</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    \usepackage{grundgesetze,fge}</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">...</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>In Frege’s notation,  a conditional is written as so:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>:::{.fregeify}</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>\GGjudge\GGconditional{p}{q}</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div>
+<p>Here the <a href="https://ctan.org/pkg/grundgesetze?lang=en">LaTeX
+grundgesetze package</a> is used to render Frege’s notation. Again,
+however, the filter is package-agnostic and may be used with any LaTeX
+packages, not just those for Frege’s notation.</p>
 <h2 id="license">License</h2>
 <p>Copyright 2024 © <a href="https://people.umass.edu/klement">Kevin C.
 Klement</a>. This is free software, which can be redistributed and/or

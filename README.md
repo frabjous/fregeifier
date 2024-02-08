@@ -39,6 +39,15 @@ pandoc --filter /path/to/repos/fregeifier/fregeifier_pandoc_filter.php \
     mydocument.md -o mydocument.html
 ```
 
+The output format of the images will either be svg or that specified as the `--default-image-extension` option passed to pandoc. For png images, one can do:
+
+```sh
+pandoc --filter /path/to/repos/fregeifier/fregeifier_pandoc_filter.php \
+    --default-image-extension=png mydocument.md -o mydocument.html
+```
+
+Currently only svg and png are supported, but this may change.
+
 For the filter to have any effect when applied to a markdown input document, parts of the document containing either inline or block/display mathematics must be given the `.fregeify` css class, e.g.:
 
 ```markdown
@@ -54,6 +63,41 @@ $$
 :::
 ```
 
+These math environments will be processed by LaTeX, converted to small images, and inserted into the document at the specified places.  Mathematics environments not so marked with the `.fregeify` class should be unaffected.
+
+Most likely, however, you don’t need to use this on boring math like “5 + 7 = 12” which can easily be rendered as regular text. The main use of the filter is to be able to call upon commands from unusual LaTeX packages. The filter will look for pandoc-compliant (yaml) metadata in the document containing code to include additional LaTeX packages in the header, which typically takes the following form:
+
+```markdown
+---
+header-includes: |
+    \usepackage{grundgesetze,fge}
+...
+```
+
+These packages will be available then not just if the markdown document is processed to PDF by a LaTeX engine, but also when the filter creates the small images.
+
+So a small complete document might look like this:
+
+```markdown
+---
+header-includes: |
+    \usepackage{grundgesetze,fge}
+...
+
+In Frege’s notation, a conditional is written as so:
+
+:::{.fregeify}
+\GGjudge\GGconditional{p}{q}
+:::
+
+```
+Here the [LaTeX grundgesetze package](https://ctan.org/pkg/grundgesetze?lang=en) is used to render Frege’s notation. Again, however, the filter is package-agnostic and may be used with any LaTeX packages, not just those for Frege’s notation.
+
+A custom template can be used to always load certain packages for a local installation. See [below](#custom-templates).
+
+## How it works
+
+The LaTeX math code extracted from the environment by pandoc is processed by the filter to create a minimal LaTeX document. That document is then processed by LaTeX into PDF, the PDF is cropped by the `pdfcrop` utility of TeXlive, and then `mutool` converts
 
 ## License
 
