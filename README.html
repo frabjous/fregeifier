@@ -279,22 +279,30 @@ content: none;
 </head>
 <body>
 <h1 id="the-amazing-fregeifier">The Amazing Fregeifier</h1>
+<h2 id="introduction">Introduction</h2>
 <p>The Fregeifier is a collection of tools for rendering unusual
 mathematics in documents and webpages, including things such Gottlob
 Frege’s logical notation or that of Russell and Whitehead’s
 <em>Principia Mathematica</em>.</p>
 <p>It is currently early in development. What has been finished so far
 is an early version of a filter for <a href="https://pandoc.org">pandoc</a> that allow only a selected subset
-of LaTeX-coded mathematics environments in a markdown document converted
-to HTML or an HTML-based format to be rendered as images created by
+of LaTeX-coded mathematics in a markdown document, when converted to
+HTML or an HTML-based format, to be rendered as images created by
 converting the output of processing the mathematics by means of a LaTeX
-engine. See the roadmap below for additional planned features.</p>
+engine. See the <a href="#roadmap-and-todo">roadmap</a> below for
+additional planned features.</p>
 <p>The name of the project, and its initial use case, involved easy
 inclusion of Gottlob Frege’s logical notation making use of the existing
 LaTeX tooling in non-LaTeX based documents. However, the Fregeifier is
 not limited to Frege notation, but can be used for any complex math
 environments for which LaTeX tools exist but cannot be currently handled
 by pandoc by itself.</p>
+<p>It was originally developed for <a href="https://jhaponline.org">The
+Journal for the History of Analytical Philosophy</a> and integrates
+easily with the <a href="https://github.com/frabjous/open-guide-typesetting-framework">Open
+Guide Typesetting Framework</a> and <a href="https://github.com/frabjous/open-guide-typesetting-framework">Open
+Guide Editor</a> it uses, which I also created, though it may be used
+independently.</p>
 <h2 id="requirements">Requirements</h2>
 <p>The Fregeifier has only been tested on linux, but may work on other
 unix-like environments.</p>
@@ -317,20 +325,27 @@ make the pandoc filter executable:</p>
 option to pandoc, e.g.:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">--filter</span> /path/to/repos/fregeifier/fregeifier_pandoc_filter.php <span class="dt">\</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    mydocument.md <span class="at">-o</span> mydocument.html</span></code></pre></div>
+<p>The output format of the images will either be svg or that specified
+as the <code>--default-image-extension</code> option passed to pandoc.
+For png images, one can do:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">--filter</span> /path/to/repos/fregeifier/fregeifier_pandoc_filter.php <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--default-image-extension</span><span class="op">=</span>png mydocument.md <span class="at">-o</span> mydocument.html</span></code></pre></div>
+<p>Currently only <code>svg</code> and <code>png</code> are supported,
+but this may change.</p>
 <p>For the filter to have any effect when applied to a markdown input
 document, parts of the document containing either inline or
 block/display mathematics must be given the <code>.fregeify</code> css
 class, e.g.:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Here is some inline math, like <span class="co">[</span><span class="ot">$2 + 2 = 4$</span><span class="co">]</span>{.fregeify},</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>with the class applied</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>Below is some display math with the class applied.</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>:::{.fregeify}</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>5 + 7 = 12</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Here is some inline math, like <span class="co">[</span><span class="ot">$2 + 2 = 4$</span><span class="co">]</span>{.fregeify},</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>with the class applied</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>Below is some display math with the class applied.</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>:::{.fregeify}</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>5 + 7 = 12</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div>
 <p>These math environments will be processed by LaTeX, converted to
 small images, and inserted into the document at the specified places.
 Mathematics environments not so marked with the <code>.fregeify</code>
@@ -341,28 +356,79 @@ of the filter is to be able to call upon commands from unusual LaTeX
 packages. The filter will look for pandoc-compliant (yaml) metadata in
 the document containing code to include additional LaTeX packages in the
 header, which typically takes the following form:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">header-includes:</span><span class="co"> |</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    \usepackage{grundgesetze,fge}</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">...</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="an">header-includes:</span><span class="co"> |</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    \usepackage{grundgesetze,fge}</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">...</span></span></code></pre></div>
 <p>These packages will be available then not just if the markdown
 document is processed to PDF by a LaTeX engine, but also when the filter
 creates the small images.</p>
 <p>So a small complete document might look like this:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="an">header-includes:</span><span class="co"> |</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    \usepackage{grundgesetze,fge}</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">...</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>In Frege’s notation,  a conditional is written as so:</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>:::{.fregeify}</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>\GGjudge\GGconditional{p}{q}</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="an">header-includes:</span><span class="co"> |</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">    \usepackage{grundgesetze,fge}</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">...</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>In Frege’s notation, a conditional is written as so:</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>:::{.fregeify}</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>\GGjudge\GGconditional{p}{q}</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div>
 <p>Here the <a href="https://ctan.org/pkg/grundgesetze?lang=en">LaTeX
 grundgesetze package</a> is used to render Frege’s notation. Again,
 however, the filter is package-agnostic and may be used with any LaTeX
 packages, not just those for Frege’s notation.</p>
+<p>A custom template can be used to always load certain packages for a
+local installation. See <a href="#custom-templates">below</a>.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>The LaTeX math code extracted from the environment by pandoc is
+processed by the filter to create a minimal LaTeX document. That
+document is then processed by LaTeX into PDF, the PDF is cropped by the
+<code>pdfcrop</code> utility of TeXlive, and then <code>mutool</code> is
+used to convert the PDF page to the output format. The images will be
+placed in an <code>images</code> subfolder of the active directory. It
+is usually best to run pandoc from the same directory as your source
+document.</p>
+<h2 id="custom-templates">Custom templates</h2>
+<p>By default, the minimal LaTeX documents are based on the file
+<code>default-template.tex</code>. However, the contents of these
+minimal documents can be modified by using a different template.</p>
+<p>Custom templates will be searched for in the following order.</p>
+<ol type="1">
+<li>The path set by environmental variable
+<code>FREGEIFIER_TEMPLATE</code> if non-empty.</li>
+<li>The current directory using the filename
+<code>fregeifier-template.tex</code>.</li>
+<li><code>$HOME/.config/fregeifier/fregeifier-template.tex</code>.</li>
+</ol>
+<p>If none of these are found, the default is used.</p>
+<p>The template may also be used to change the LaTeX engine used. If the
+template contains (most likely in a comment), <code>xelatex</code> or
+<code>lualatex</code>, they will be used instead to create the
+intermediate PDFs; otherwise <code>pdflatex</code> is used.</p>
+<p>Templates must also contain comments of the following forms:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">% FREGEIFIER:HEADERINCLUDES</span></span></code></pre></div>
+<p>and</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">% FREGEIFIER:MATHTEXT</span></span></code></pre></div>
+<p>When processing a “fregeified” math environment, the former will be
+replaced by any TeX-specific <code>header-includes:</code> content, and
+the latter by the LaTeX code used in the math fragment.</p>
+<p>There must be exactly one space between the <code>%</code> and the
+words in the template.</p>
+<p>The file <code>default-template.tex</code> can be consulted for
+comparison, and/or directly copied and modified.</p>
+<h2 id="roadmap-and-todo">Roadmap and TODO</h2>
+<p>Eventually, the Fregeifier should offer more than just a pandoc
+filter.</p>
+<p>It should also make it easy to use to create images compatible with
+other file formats, such as <code>.docx</code>, <code>.odt</code> and
+similar.</p>
+<p>Eventually, I hope to create a web interface for download such
+images, and a mechanism for inserting complex or unusual mathematics
+into webpages just with a url, or some javascript insertion. This should
+supplement tools such as MathJax or KaTeX but be able to handle all
+possible LaTeX code, not just what is supported by more limited
+tools.</p>
 <h2 id="license">License</h2>
 <p>Copyright 2024 © <a href="https://people.umass.edu/klement">Kevin C.
 Klement</a>. This is free software, which can be redistributed and/or
