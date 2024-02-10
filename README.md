@@ -5,7 +5,7 @@
 
 The Fregeifier is a collection of tools for rendering unusual mathematics in documents and webpages, including things such Gottlob Frege’s logical notation or that of Russell and Whitehead’s *Principia Mathematica*.
 
-It is currently early in development. What has been finished so far is an early version of a filter for [pandoc](https://pandoc.org) that allows a selected subset of LaTeX-coded mathematics in a markdown document, when converted to HTML or an HTML-based format, to be rendered as images created by converting the output of processing the mathematics by means of a full-featured LaTeX engine. See the [roadmap](#roadmap-and-todo) below for additional planned features.
+It is currently early in development. What has been finished so far is an early version of a filter for [pandoc](https://pandoc.org) that allows a selected subset of LaTeX-coded mathematics in a markdown document, when converted to a non-LaTeX format, such as `.docx`, `.html` or `.epub`, to be rendered as images created by converting the output of processing the mathematics by means of a full-featured LaTeX engine. See the [roadmap](#roadmap-and-todo) below for additional planned features.
 
 The name of the project came from the need for easy inclusion of Gottlob Frege's logical notation in non-LaTeX based documents, but still making use of the existing LaTeX tooling. However, the Fregeifier is not limited to Frege notation, but can be used for any complex math environments for which LaTeX tools exist, but cannot be currently handled directly by programs such as pandoc as-is.
 
@@ -38,11 +38,18 @@ chmod a+x /path/to/repos/fregeifier/fregeifier_pandoc_filter.php
 
 For background, see pandoc’s documentation on [(json) filters](https://pandoc.org/filters.html).
 
-The filter can be called using the `--filter` command line option to pandoc, e.g.:
+The filter can be called using the `--filter` command line option to pandoc. For `.html` output:
 
 ```sh
 pandoc --filter /path/to/repos/fregeifier/fregeifier_pandoc_filter.php \
     mydocument.md -o mydocument.html
+```
+
+For `.docx` (“MS Word”) format:
+
+```sh
+pandoc --filter /path/to/repos/fregeifier/fregeifier_pandoc_filter.php \
+    mydocument.md -o mydocument.docx
 ```
 
 The output format of the images will either be svg or that specified as the `--default-image-extension` option passed to pandoc. For png images, one can do:
