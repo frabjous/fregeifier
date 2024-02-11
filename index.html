@@ -47,6 +47,7 @@ main {
     overflow: auto;
     background-color: #DDDDDD;
     clear: both;
+    padding-bottom: 2rem;
 }
 
 html {
@@ -104,6 +105,10 @@ textarea {
     border-radius: 10px;
     padding: 8px;
     box-sizing: border-box;
+}
+
+textarea#extra {
+    height: 5rem;
 }
 
 select, input {
@@ -170,9 +175,10 @@ br.clearer {
 }
 
 #advancedoptions {
-    border: 1px solid #777777;
+    border: 1px solid #AAAAAA;
     padding: 8px;
     border-radius: 10px;
+    margin-top: 0.5rem;
 }
 
 #advancedoptions > p {
@@ -209,6 +215,15 @@ input[type="number"] {
     margin-right: 0.5rem;
 }
 
+button {
+    background-color: #EEEEEE;
+    font-size: 120%;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    margin: 1rem 0 2rem 0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 </style>
 
 <script type="module">
@@ -229,6 +244,26 @@ input[type="number"] {
             e[o] = opts[o];
         }
         return e;
+    }
+
+    function valueOfElem(id) {
+        const elem = document.getElementById(id);
+        if (!elem) { return null; }
+        if (!(elem?.value)) { return null; }
+        return elem.value;
+    }
+
+    function sendRequest() {
+        const req = {
+            latexcode: valueOfElem('latexcode'),
+            imageext: valueOfElem('imageext'),
+            font: valueOfElem('font'),
+            packages: valueOfElem('packages'),
+            thickness: valueOfElem('thickness'),
+            linewidth: valueOfElem('linewidth'),
+            extra: valueOfElem('extra')
+        }
+        console.log(req);
     }
 
     const formarea= document.getElementById("formarea");
@@ -313,10 +348,12 @@ input[type="number"] {
             this.myao.classList.remove('hidden');
             this.myao.classList.add('shown');
             this.mywidg.innerHTML = '⏷';
+            this.mywidg.title = 'click to hide';
         } else {
             this.myao.classList.remove('shown');
             this.myao.classList.add('hidden');
             this.mywidg.innerHTML = '⏵';
+            this.mywidg.title = 'click to show';
         }
     }
     const innerao = newelem('div', {
@@ -357,7 +394,7 @@ input[type="number"] {
     const wlbl = newelem('label', {
         parent: innerao,
         htmlFor: 'linewidth',
-        innerHTML: 'horizontal line width pre/post operators',
+        innerHTML: 'Horizontal line width pre/post operators',
         classes: ['blocklabel']
     });
     const linewidth = newelem('input', {
@@ -372,6 +409,27 @@ input[type="number"] {
     const wunit = newelem('span', {
         parent: innerao,
         innerHTML: 'pts'
+    });
+    const extralbl = newelem('label', {
+        parent: innerao,
+        htmlFor: 'extra',
+        value: '',
+        innerHTML: 'Extra code for LaTeX header',
+        classes: ['blocklabel']
+    });
+    const extra = newelem('textarea', {
+        parent: innerao,
+        id: 'extra'
+    });
+    const sbtndiv = newelem('div', {
+        parent: formarea
+    });
+    const sbtn = newelem('button', {
+        parent: sbtndiv,
+        innerHTML: 'create image',
+        type: 'button',
+        title: 'click to process image creation',
+        onclick: function() { sendRequest(); }
     });
 
     /*
@@ -404,8 +462,8 @@ input[type="number"] {
                 <p>If you choose a vector format, the image will be infinitely scaleable and should still look good when scaled to any size.</p>
                 <p>By default, the <a href="https://ctan.org/pkg/grundgesetze">grundgesetze</a> and <a href="https://ctan.org/pkg/fge">fge</a> (along with standard AMS math packages) packages are loaded; see <a href="#commands">below</a> for their commands.</p>
                 <h3>Create a Fregeified Image</h3>
-                <div id="outputarea"></div>
                 <div id="formarea"></div>
+                <div id="outputarea"></div>
                 <h3 id="commands">Commands</h3>
                 <p>Summary of commands from <tt>grundgesetze</tt> package. For more info, and more advanced usage, see <a href="http://mirrors.ctan.org/macros/latex/contrib/grundgesetze/grundgesetze.pdf">its documentation</a>.</p>
                 <p class="cmdlist"><span class="holder"><img src="images/gglist.svg"></span></p>
