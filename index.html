@@ -46,6 +46,7 @@ header,footer {
 main {
     overflow: auto;
     background-color: #DDDDDD;
+    clear: both;
 }
 
 html {
@@ -58,17 +59,22 @@ header {
     color: #dee3e8;
 }
 
-a {
+a, a:link {
     text-decoration: none;
+    color: #354099;
 }
 
-a:hover {
+a:visited {
+    color: #804080;
+}
+
+
+a:hover,
+a:link:hover,
+a:visited:hover {
     text-decoration: underline;
 }
 
-a, a:link {
-    color: #426090;
-}
 
 header a,
 header a:link,
@@ -83,6 +89,23 @@ footer a:visited {
     height: 80px;
     width: 80px;
     vertical-align: middle;
+    float: left;
+}
+
+header {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+header h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+p.fquote {
+    font-style: italic;
+    color: #b0c0c0;
+    margin-top: 0;
 }
 
 </style>
@@ -95,31 +118,19 @@ footer a:visited {
     <body>
         <header>
             <div class="wrapper">
-                <h1><img src="images/fgemark.png" id="logo">The Amazing Fregeifier</h1>
+                <img src="images/fgemark.png" id="logo">
+                <h1>The Amazing Fregeifier</h1>
+                <p class="fquote">“The comfort of the typesetter is certainly not the summum bonum.” –Gottlob Frege</p>
             </div>
         </header>
         <main>
             <div class="wrapper">
                 <h2>Fregeifier Web Interface</h2>
-                <p>This <a href="http://google.com">this</a> <a href="https://bing.com">bing</a> interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
-                <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
                 <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
                 <p>A great case in point is the logical notation of Gottlob Frege.</p>
+                <p>Feel free to use the form below to convert a formula in <!-- modern notation or -->LaTeX code into an image you can embed in your documents.</p>
+                <p>If you choose a vector format, the image will be infinitely scaleable and should still look good when scaled to any size.</p>
+                <p>By default, the <a href="https://ctan.org/pkg/grundgesetze">grundgesetze</a> and <a href="https://ctan.org/pkg/fge">fge</a> (along with standard AMS math packages) packages are loaded; see below for their commands.</p>
             </div>
         </main>
         <footer>
