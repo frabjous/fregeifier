@@ -247,6 +247,16 @@ button:hover {
     display: block;
 }
 
+span.errorword {
+    color: red;
+}
+
+#outputarea .imgholder {
+    background-color: white;
+    display: inline-block;
+    padding: 0.5rem;
+}
+
 </style>
 
 <script type="module">
@@ -275,10 +285,25 @@ button:hover {
 
     function reportError(msg) {
         const oa = document.getElementById("outputarea");
+        oa.classList.remove('hidden');
         oa.classList.add('shown');
         oa.innerHTML = '<span class="errorword">Processing Error</span>: ' +
             msg;
         oa.scrollIntoView();
+    }
+
+    function startDownload(url, fn) {
+        // create link element with appropriate properties
+        const link = document.createElement('a');
+        link.href = url;
+        if (fn != '') {
+            link.download = filename;
+        }
+        // add it to body, click it, then remove it
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return true;
     }
 
     function valueOfElem(id) {
@@ -344,6 +369,37 @@ button:hover {
             reportError('Invalid response from server.');
             return;
         }
+        outputarea.classList.remove('hidden');
+        outputarea.classList.add('shown');
+        outputarea.innerHTML = '';
+        const hdr = newelem('h3', {
+            innerHTML: 'Generated image',
+            parent: outputarea
+        });
+        const imgdiv = newelem('div', {
+            parent: outputarea
+        });
+        const imgholder = newelem('div', {
+            parent: imgdiv,
+            classes: ['imgholder']
+        });
+        const img = newelem('img', {
+            src: respObj.url,
+            alt: req.latexcode
+        });
+        const btndiv = newelem('div', {
+            parent: outputarea
+        });
+        const dlbtn = newelem('button', {
+            type: 'button',
+            innerHTML: 'download',
+            dlurl: url + '&dl=true',
+            fn: (respObj?.filename ?? ''),
+            onclick: function() {
+                startDownload(this.dlurl, this.fn);
+            }
+        });
+        outputarea.scrollIntoView();
     }
 
     const formarea= document.getElementById("formarea");
@@ -512,6 +568,7 @@ button:hover {
         title: 'click to process image creation',
         onclick: function() { sendRequest(); }
     });
+
 
 </script>
 
