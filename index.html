@@ -109,6 +109,7 @@ textarea {
 
 textarea#extra {
     height: 5rem;
+    margin-bottom: 1rem;
 }
 
 select, input {
@@ -224,6 +225,21 @@ button {
     cursor: pointer;
 }
 
+button:disabled {
+    cursor: inherit;
+    background-color: #555555;
+    color: #AAAAAA;
+}
+
+button:disabled:hover {
+    background-color: #555555;
+}
+
+
+button:hover {
+    background-color: #F0F0F0;
+}
+
 </style>
 
 <script type="module">
@@ -248,12 +264,12 @@ button {
 
     function valueOfElem(id) {
         const elem = document.getElementById(id);
-        if (!elem) { return null; }
-        if (!(elem?.value)) { return null; }
+        if (!elem) { return ''; }
+        if (!(elem?.value)) { return ''; }
         return elem.value;
     }
 
-    function sendRequest() {
+    async function sendRequest() {
         const req = {
             latexcode: valueOfElem('latexcode'),
             imageext: valueOfElem('imageext'),
@@ -263,7 +279,19 @@ button {
             linewidth: valueOfElem('linewidth'),
             extra: valueOfElem('extra')
         }
+        if (req.latexcode == '') {
+            alert('Cannot process without any code!');
+            return;
+        }
+        const b =
+            document.getElementById("proce" + "ssb" + "utton");
+        b.innerHTML = 'processing …';
+        b.title = '';
+        b.disabled = true;
         console.log(req);
+        b.disabled = false;
+        b.innerHTML = 'create image';
+        b.title = 'click to process image creation';
     }
 
     const formarea= document.getElementById("formarea");
@@ -428,6 +456,7 @@ button {
         parent: sbtndiv,
         innerHTML: 'create image',
         type: 'button',
+        id: 'proc' + 'essbutt' + 'on',
         title: 'click to process image creation',
         onclick: function() { sendRequest(); }
     });
@@ -472,7 +501,7 @@ button {
                 <h3>Additional Info</h3>
                 <ul>
                     <li>The Fregeifier is not limited to Frege notation. You can use it with any LaTeX code. To use other packages and commands, see the options under “Advanced” above.</li>
-                    <li>The Fregeifier is not just this website. It also provides a filter for <a href="https://pandoc.org">pandoc</a> so you can use Frege notation in your markdown documents, or create documents with its output locally.</li>
+                    <li>The Fregeifier is not just this web page. It also provides a filter for <a href="https://pandoc.org">pandoc</a> so you can use Frege notation in your markdown documents, or create documents with its output locally.</li>
                     <li>You can install the Fregeifier on your own system, your own website, or make use of it in your own typesetting workflows, as does the <a href="https://jhaponline.org">Journal for the History of Analytical Philosophy</a>.</li>
                     <li>For more info on all these, see the <a href="https://github.com/frabjous/fregeifier">GitHub repository for the project</a> and its README.</li>
                 </ul>
