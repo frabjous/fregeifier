@@ -175,6 +175,24 @@ br.clearer {
     border-radius: 10px;
 }
 
+#advancedoptions > p {
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.showhidewidget {
+    display: inline-block;
+    float: right;
+}
+
+#advancedoptions.hidden #inneradvanced {
+    display: none;
+}
+#advancedoptions.show #inneradvanced {
+    display: block;
+}
+
 </style>
 
 <script type="module">
@@ -265,10 +283,46 @@ br.clearer {
         innerHTML: 'Advanced options',
         parent: ao
     });
+    const widg = newelem('span', {
+        innerHTML: '⏵',
+        classes: ['showhidewidget'],
+        parent: aol,
+        title: 'click to show'
+    });
+    aol.mywidg = widg;
+    aol.myao = ao;
+    aol.onclick = function() {
+        if (this.myao.classList.contains('hidden')) {
+            this.myao.classList.remove('hidden');
+            this.myao.classList.add('shown');
+            this.mywidg.innerHTML = '⏷';
+        } else {
+            this.myao.classList.remove('shown');
+            this.myao.classList.add('hidden');
+            this.mywidg.innerHTML = '⏵';
+        }
+    }
+    const innerao = newelem('div', {
+        parent: ao,
+        id: 'inneradvanced'
+    });
+    const pkglbl = newelem('label', {
+        parent: innerao,
+        htmlFor: 'packages',
+        innerHTML: 'LaTeX packages',
+        classes: ['blocklabel']
+    }
+    const pkgs = newelem('input', {
+        parent: innerao,
+        id: 'packages',
+        type: 'text',
+        value: 'fge, grundgesetze'
+    });
+    /*
     const brc = newelem('br', {
         parent: ao,
         classes: ['clearer']
-    });
+    }); */
 
 </script>
 
