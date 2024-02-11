@@ -51,12 +51,8 @@ main {
 
 html {
     font-family: sans-serif;
-}
-
-footer,
-header {
-    background-color: #333333;
-    color: #dee3e8;
+    font-size: 16px;
+    color: black;
 }
 
 a, a:link {
@@ -73,16 +69,6 @@ a:hover,
 a:link:hover,
 a:visited:hover {
     text-decoration: underline;
-}
-
-
-header a,
-header a:link,
-header a:visited,
-footer a,
-footer a:link,
-footer a:visited {
-    color: #87afdf;
 }
 
 #logo {
@@ -108,6 +94,26 @@ p.fquote {
     margin-top: 0;
 }
 
+@media screen {
+
+footer,
+header {
+    background-color: #333333;
+    color: #dee3e8;
+}
+
+header a,
+header a:link,
+header a:visited,
+footer a,
+footer a:link,
+footer a:visited {
+    color: #87afdf;
+}
+
+}
+
+
 </style>
 
         <!-- css file -->
@@ -131,12 +137,23 @@ p.fquote {
                 <p>Feel free to use the form below to convert a formula in <!-- modern notation or -->LaTeX code into an image you can embed in your documents.</p>
                 <p>If you choose a vector format, the image will be infinitely scaleable and should still look good when scaled to any size.</p>
                 <p>By default, the <a href="https://ctan.org/pkg/grundgesetze">grundgesetze</a> and <a href="https://ctan.org/pkg/fge">fge</a> (along with standard AMS math packages) packages are loaded; see below for their commands.</p>
+                <h3>Create a Fregeified Image</h3>
+                <div id="formarea"></div>
+                <h3>Additional Info</h3>
+                <ul>
+                    <li>The Fregeifier is not limited to Frege notation. You can use it with any LaTeX code. To use other packages and commands, see the options under “Advanced” above.</li>
+                    <li>The Fregeifier is not just this website. It also provides a filter for <a href="https://pandoc.org">pandoc</a> so you can use Frege notation in your markdown documents, or create documents with its output locally.</li>
+                    <li>You can install the Fregeifier on your own system, your own website, or make use of it in your own typesetting workflows, as does the <a href="https://jhaponline.org">Journal for the History of Analytical Philosophy</a>.</li>
+                    <li>For more info on all these, see the <a href="https://github.com/frabjous/fregeifier">GitHub repository for the project</a> and its README.</li>
+                </ul>
+                <h3>Acknowledgements/Thanks</h3>
+                <p>A debt of gratitude is owed to the creators of LaTeX packages such as <tt>fge</tt> and <tt>grundgesetze</tt>, including J. J. Green, Marcus Rossberg, and others.</p>
             </div>
         </main>
         <footer>
             <div class="wrapper">
                 <p>The Fregeifier and this webpage created by <a href="https://people.umass.edu/klement">Kevin C. Klement</a>, and all its code is open source and may be freely reused, modified and redistributed according to the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL v3 license.</a></p>
-                <p>The code repoistory for the Fregeifier can be found at <a href="https://github.com/frabjous/fregeifier">https://github.com/frabjous/fregeifier</a></p>
+                <p>The code repoistory for the Fregeifier can be found at <a href="https://github.com/frabjous/fregeifier">https://github.com/frabjous/fregeifier</a>.</p>
             </div>
         </footer>
 
