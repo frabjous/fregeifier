@@ -122,6 +122,10 @@ table td:first-child {
     padding-right: 1rem;
 }
 
+table td {
+    padding-bottom: 0.5rem;
+}
+
 .cmdlist .holder {
     display: inline-block;
     background-color: white;
@@ -159,6 +163,16 @@ table td:first-child {
 
 h3 {
     margin-top: 3rem;
+}
+
+br.clearer {
+    clear: both;
+}
+
+#advancedoptions {
+    border: 1px solid #777777;
+    padding: 8px;
+    border-radius: 10px;
 }
 
 </style>
@@ -212,7 +226,49 @@ h3 {
         innerHTML: '<option value="svg" selected>svg (vector/scaleable)</option>' +
             '<option value="png">png (raster/pixel based)</option>'
     });
-
+    const ftr = newelem('tr', { parent: tbdy });
+    const fltd = newelem('td', { parent: ftr });
+    const fll = newelem('label', {
+        htmlFor: 'font',
+        innerHTML: 'Font',
+        parent: fltd
+    });
+    const fstd = newelem('td', { parent: ftr });
+    const fselect = newelem('select', {
+        parent: fstd,
+        id: 'font'
+    });
+    for (const font of [
+        ['Baskerville-like (BaskervaldX)', 'baskerville'],
+        ['Computer Modern (LaTeX default)', 'computermodern'],
+        ['Fira Sans', 'fira'],
+        ['Garamond (EB Garamond)', 'garamond'],
+        ['Noto Serif', 'noto'],
+        ['Palatino-like (TeX Gyre Pagella)', 'palatino'],
+        ['Times-like (TeX Gyre Termes)', 'times'],
+        ['URW Schoolbook L', 'schoolbook']
+    ]) {
+        const fopt = newelem('option', {
+            innerHTML: font[0],
+            value: font[1],
+            parent: fselect
+        });
+        if (font[1] == 'times') {
+            fopt.selected = true;
+        }
+    }
+    const ao = newelem('div', {
+        parent: formarea,
+        id: 'advancedoptions'
+    });
+    const aol = newelem('p', {
+        innerHTML: 'Advanced options',
+        parent: ao
+    });
+    const brc = newelem('br', {
+        parent: ao,
+        classes: ['clearer']
+    });
 
 </script>
 
