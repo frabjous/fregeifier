@@ -243,6 +243,10 @@ button:hover {
 </style>
 
 <script type="module">
+// LICENSE: GNU GPL v3 You should have received a copy of the GNU General
+// Public License along with this program. If not, see
+// https://www.gnu.org/licenses/.
+
     function newelem(tt, opts = {}) {
         const e = document.createElement(tt);
         if ("parent" in opts) {
@@ -292,6 +296,25 @@ button:hover {
         b.disabled = false;
         b.innerHTML = 'create image';
         b.title = 'click to process image creation';
+        let respObj = {};
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                cache: "no-cache",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                redirect: "follow",
+                referrerPolicy: "no-referrer",
+                body: JSON.stringify(data),
+            });
+            respObj = await response.json();
+        } catch(err) {
+        }
+}
+
+
     }
 
     const formarea= document.getElementById("formarea");
