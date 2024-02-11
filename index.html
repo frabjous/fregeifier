@@ -13,9 +13,7 @@
         <meta property="og:title" content="Fregeifier Web Interface">
         <meta property="og:description" content="Interface for creating Frege notation or other complex mathematics">
 
-        <meta name="robots" content="noindex,nofollow">
-
-        <!-- if mobile ready -->
+        <!-- mobile ready -->
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="mobile-web-app-capable" content="yes">
@@ -240,6 +238,15 @@ button:hover {
     background-color: #F0F0F0;
 }
 
+#outputarea,
+#outputarea.hidden {
+    display: none;
+}
+
+#outputarea.shown {
+    display: block;
+}
+
 </style>
 
 <script type="module">
@@ -264,6 +271,14 @@ button:hover {
             e[o] = opts[o];
         }
         return e;
+    }
+
+    function reportError(msg) {
+        const oa = document.getElementById("outputarea");
+        oa.classList.add('shown');
+        oa.innerHTML = '<span class="errorword">Processing Error</span>: ' +
+            msg;
+        oa.scrollIntoView();
     }
 
     function valueOfElem(id) {
@@ -297,6 +312,8 @@ button:hover {
         b.innerHTML = 'create image';
         b.title = 'click to process image creation';
         let respObj = {};
+        let errMsg = '';
+        let error = false;
         try {
             const response = await fetch(url, {
                 method: "POST",
@@ -311,10 +328,22 @@ button:hover {
             });
             respObj = await response.json();
         } catch(err) {
+            error = true;
+            errMsg = err.toString();
         }
-}
-
-
+        if (("error" in respObj) && (respObj.error)) {
+            error = true;
+            errMsg += ((errMsg == '') ? '' : '; ') +
+                (("errmsg" in respObj) ?
+                    respObj.errmsg : 'Unknown error' );
+        }
+        if (error) {
+            reportError(errMsg);
+        }
+        if (!("url" in respObj)) {
+            reportError('Invalid response from server.');
+            return;
+        }
     }
 
     const formarea= document.getElementById("formarea");
@@ -483,12 +512,6 @@ button:hover {
         title: 'click to process image creation',
         onclick: function() { sendRequest(); }
     });
-
-    /*
-    const brc = newelem('br', {
-        parent: ao,
-        classes: ['clearer']
-    }); */
 
 </script>
 
