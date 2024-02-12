@@ -23,7 +23,7 @@ function determine_datadir() {
     return false;
 }
 
-function header_from_opts($opts) {
+function headers_from_opts($opts) {
     $foundgg = false;
     $hdrs = '';
     $fontopts = array(
@@ -42,16 +42,17 @@ function header_from_opts($opts) {
         "schoolbook"=>'\usepackage{fouriernc}' . PHP_EOL
     );
     if (isset($opts->font)) {
-        $hdrs .= ((isset($fontopts[$opts->font])) ?
-            $fontopts[$opts->font] ? : '');
+        if (isset($fontopts[$opts->font])) {
+            $hdrs .= $fontopts[$opts->font];
+        }
     }
     if (isset($opts->packages) && ($opts->packages != '')) {
-        $pkgs = explode(',', $opts->packages;
+        $pkgs = explode(',', $opts->packages);
         foreach($pkgs as $pkg) {
             if (trim($pkg) == 'grundgesetze') {
                 $foundgg = true;
             }
-            $hdrs .= '\usepackage{' . trim($pkg) . '}';
+            $hdrs .= '\usepackage{' . trim($pkg) . '}' . PHP_EOL;
         }
     }
     if (isset($opts->extra) && ($opts->extra != '')) {
@@ -63,13 +64,13 @@ function header_from_opts($opts) {
     if ($foundgg) {
         if (isset($opts->thickness) && ($opts->thickness != '')) {
             $hdrs .= '\setlength{\GGthickness}{' .
-                $opts->thickness . '}' . PHP_EOL;
+                $opts->thickness . 'pt}' . PHP_EOL;
         }
         if (isset($opts->linewidth) && ($opts->linewidth != '')) {
             $hdrs .= '\setlength{\GGbeforelen}{' .
-                $opts->linewidth . '}' . PHP_EOL .
+                $opts->linewidth . 'pt}' . PHP_EOL .
                 '\setlength{\GGafterlen}{' . $opts->linewidth .
-                '}' . PHP_EOL;
+                'pt}' . PHP_EOL;
         }
     }
     return $hdrs;

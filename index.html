@@ -352,7 +352,7 @@ span.errorword {
                 },
                 redirect: "follow",
                 referrerPolicy: "no-referrer",
-                body: JSON.stringify(data),
+                body: JSON.stringify(req),
             });
             respObj = await response.json();
         } catch(err) {

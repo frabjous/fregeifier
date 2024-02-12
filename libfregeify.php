@@ -7,7 +7,7 @@
 // Common functions for image creation and discovery      //
 ////////////////////////////////////////////////////////////
 
-
+error_log("loading");
 // NOTE: should be loaded after navigating to correct directory
 
 function clean_up() {
@@ -121,6 +121,7 @@ function make_image($mathtext, $displayinline, $ctr) {
         $latexcmd . ' -jobname=fregeifier_temporary_file',
         $latex_code
     );
+    error_log('======='.$latex_code.'======');
     if ($comp_result->returnvalue != 0) {
         clean_up();
         error_log('Fregeifier unable to compile LaTeX:' .

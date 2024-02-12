@@ -14,13 +14,15 @@ function rage_quit($msg) {
     global $response;
     $response->error = true;
     $response->errmsg = $msg;
-    echo json_encode($msg, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+    echo json_encode($response,
+        JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
     exit(0);
 }
 
 
 // read request
-$inputbody = file_get_contents('php://stdin') ?? '{}';
+$inputbody = file_get_contents('php://input') ?? '{}';
+file_put_contents('/home/kck/tmp/req.json', $inputbody);
 $opts = json_decode($inputbody) ?? false;
 if (!$opts) {
     rage_quit('Invalid JSON request.');
@@ -31,12 +33,16 @@ if ((!isset($opts->latexcode)) || ($opts->latexcode == '')) {
 
 require_once('libcache.php');
 
-
 $template = get_template();
 $image_extension = (isset($opts->imageext) ? $opts->imageext : 'svg');
 $tempkey = newkey();
 $oldpwd = getcwd();
 // operate in the temporary folder
+if (!is_dir("$datadir/temporary/$tempkey")) {
+    if (!mkdir("$datadir/temporary/$tempkey", 0755, true)) {
+        rage_quit("Could not create temporary folder.");
+    }
+}
 chdir("$datadir/temporary/$tempkey");
 $record = get_record();
 $comperrors = '';
