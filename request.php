@@ -27,4 +27,14 @@ if (!$opts) {
     rage_quit('Invalid JSON request.');
 }
 
+$template = get_template();
+$image_extension = (isset($opts->imageext) ? $opts->imageext : 'svg');
+$tempkey = newkey();
+$oldpwd = getcwd();
+
+$extra_headers = headers_from_opts($opts);
+
+// operate in the temporary folde
+chdir("$datadir/temporary/$tempkey");
+chdir($oldpwd);
 
