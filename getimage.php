@@ -38,7 +38,7 @@ function send_file($fn) {
 }
 
 // read details of submission
-foreach(array('latexcode','thickness','extra',
+foreach(array('latexcode','thickness','extra','lift',
     'linewidth','font','imageext','packages') as $thisopt) {
     if (isset($_GET[$thisopt])) {
         $opts->{$thisopt} = $_GET[$thisopt];
@@ -52,10 +52,9 @@ if (isset($_GET["tempkey"])) {
     $tempkey = $_GET["tempkey"];
 }
 
-$image_extension = 'svg';
+require_once('libcache.php');
 if (isset($opts->imageext)) { $image_extension = $opts->imageext; }
 
-require_once('libcache.php');
 
 // send existing image if tempkey provided
 if ($tempkey != '') {

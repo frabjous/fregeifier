@@ -72,6 +72,10 @@ function headers_from_opts($opts) {
                 '\setlength{\GGafterlen}{' . $opts->linewidth .
                 'pt}' . PHP_EOL;
         }
+        if (isset($opts->lift) && ($opts->lift != '')) {
+            $hdrs .= '\setlength{\GGlift}{' . $opts->lift . 'pt}' .
+                PHP_EOL;
+        }
     }
     return $hdrs;
 }
