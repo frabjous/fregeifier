@@ -297,7 +297,7 @@ span.errorword {
         const link = document.createElement('a');
         link.href = url;
         if (fn != '') {
-            link.download = filename;
+            link.download = fn;
         }
         // add it to body, click it, then remove it
         document.body.appendChild(link);
@@ -327,8 +327,8 @@ span.errorword {
             alert('Cannot process without any code!');
             return;
         }
-        if (req.latexcode.length > 2000) {
-            alert('Code is limited to 2000 characters.');
+        if (req.latexcode.length > 3000) {
+            alert('Code is limited to 3000 characters.');
             return;
         }
         const b =
@@ -364,12 +364,13 @@ span.errorword {
             errMsg += ((errMsg == '') ? '' : '; ') +
                 (("errmsg" in respObj) ?
                     respObj.errmsg : 'Unknown error' );
+            return;
         }
         if (error) {
             reportError(errMsg);
+            return;
         }
         if (!("url" in respObj)) {
-            console.log(respObj);
             reportError('Invalid response from server.');
             return;
         }
@@ -388,6 +389,7 @@ span.errorword {
             classes: ['imgholder']
         });
         const img = newelem('img', {
+            parent: imgholder,
             src: respObj.url,
             alt: req.latexcode
         });
@@ -398,7 +400,7 @@ span.errorword {
             parent: btndiv,
             type: 'button',
             innerHTML: 'download',
-            dlurl: url + '&dl=true',
+            dlurl: respObj.url + '&dl=true',
             fn: (respObj?.filename ?? ''),
             onclick: function() {
                 startDownload(this.dlurl, this.fn);

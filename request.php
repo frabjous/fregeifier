@@ -47,6 +47,11 @@ $record = get_record();
 $comperrors = '';
 $extra_headers = headers_from_opts($opts);
 
+if (strlen($opts->latexcode) > 3000){
+    rage_quit('Code provided was too long for web interface. ' +
+        'Consider using a local installation of Fregeifier instead.');
+}
+
 $filename = get_image_file($opts->latexcode, 'display');
 if ($record->{$opts->latexcode}->{'display'}->{$image_extension} === false) {
     rage_quit('Unable to create image. Please check your code for errors.'
