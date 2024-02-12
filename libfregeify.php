@@ -117,11 +117,10 @@ function make_image($mathtext, $displayinline, $ctr) {
     }
     // compile LaTeX to PDF
     $comp_result = pipe_to_command(
-        $latexcmd . ' -jobname=fregeifier_temporary_file -file-line-error -interaction=batchmode -halt-on-error',
+        $latexcmd . ' -jobname=fregeifier_temporary_file -interaction=nonstophmode -no-shell-escape',
         $latex_code
     );
     if ($comp_result->returnvalue != 0) {
-        error_log('===='.$comp_result->stdout.'===='.$comp_result->stderr);
         $outputlines = explode(PHP_EOL,$comp_result->stdout);
         foreach($outputlines as $line) {
             if (strlen($line) == 0) { continue; }
@@ -175,7 +174,7 @@ function make_image($mathtext, $displayinline, $ctr) {
         error_log('Fregeifier result file not found.' . PHP_EOL);
         return false;
     }
-    clean_up();
+    //clean_up();
     return $filename;
 }
 
