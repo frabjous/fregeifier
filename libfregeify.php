@@ -95,7 +95,7 @@ function make_image($mathtext, $displayinline, $ctr) {
     if (!is_dir('images')) {
         mkdir('images',0755,true);
     }
-    global $image_extension, $template, $extra_headers;
+    global $comperrors, $image_extension, $template, $extra_headers;
     $filename = 'images/fregeify' . strval($ctr) . '.' . $image_extension;
     // wrap math LaTeX code with proper delimiter
     if ($displayinline == 'display') {
@@ -125,6 +125,7 @@ function make_image($mathtext, $displayinline, $ctr) {
         clean_up();
         error_log('Fregeifier unable to compile LaTeX:' .
                 PHP_EOL . $comp_result->stderr . PHP_EOL);
+        $comperrors .= $comp_result->stderr;
         return false;
     }
     if (!file_exists('fregeifier_temporary_file.pdf')) {
@@ -208,7 +209,6 @@ function save_record($rec) {
 }
 
 // initialize
-$record = get_record();
 $image_extension = 'svg';
 $template = get_template();
 if ($template === false) {

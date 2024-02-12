@@ -336,7 +336,6 @@ span.errorword {
         b.innerHTML = 'processing …';
         b.title = '';
         b.disabled = true;
-        console.log(req);
         b.disabled = false;
         b.innerHTML = 'create image';
         b.title = 'click to process image creation';
@@ -370,6 +369,7 @@ span.errorword {
             reportError(errMsg);
         }
         if (!("url" in respObj)) {
+            console.log(respObj);
             reportError('Invalid response from server.');
             return;
         }

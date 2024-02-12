@@ -40,6 +40,10 @@ if (isset($obj->meta->{'header-includes'})) {
     $extra_headers = get_extra_headers($obj->meta->{'header-includes'}, '');
 }
 
+// read the record
+$record = get_record();
+$comperrors = '';
+
 // apply changes to document
 if (isset($obj->blocks)) {
     $obj->blocks = fregeify_ast($obj->blocks, false);
