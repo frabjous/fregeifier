@@ -117,14 +117,21 @@ function make_image($mathtext, $displayinline, $ctr) {
     }
     // compile LaTeX to PDF
     $comp_result = pipe_to_command(
-        $latexcmd . ' -jobname=fregeifier_temporary_file',
+        $latexcmd . ' -jobname=fregeifier_temporary_file -file-line-error -interaction=batchmode -halt-on-error',
         $latex_code
     );
     if ($comp_result->returnvalue != 0) {
+        error_log('===='.$comp_result->stdout.'===='.$comp_result->stderr);
+        $outputlines = explode(PHP_EOL,$comp_result->stdout);
+        foreach($outputlines as $line) {
+            if (strlen($line) == 0) { continue; }
+            if ($line[0] == '!') {
+                $comperrors .= $line . ' ';
+            }
+        }
         clean_up();
-        error_log('Fregeifier unable to compile LaTeX:' .
-                PHP_EOL . $comp_result->stderr . PHP_EOL);
-        $comperrors .= $comp_result->stderr;
+        error_log('Fregeifier unable to compile LaTeX.' .
+                PHP_EOL . $comperrors . PHP_EOL);
         return false;
     }
     if (!file_exists('fregeifier_temporary_file.pdf')) {

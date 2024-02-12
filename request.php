@@ -54,9 +54,8 @@ if (strlen($opts->latexcode) > 3000){
 
 $filename = get_image_file($opts->latexcode, 'display');
 if ($record->{$opts->latexcode}->{'display'}->{$image_extension} === false) {
-    error_log('=========='.json_encode($record->{$opts->latexcode}->{'display'}->{$image_extension}));
     rage_quit('Unable to create image. Please check your code for errors.'
-        .' StdErr: <pre style="max-height: 10rem; overflow: auto;">' . 
+        .' StdErr: <pre style="max-height: 10rem; overflow: auto;">' .
         $comperrors . '</pre>');
 }
 

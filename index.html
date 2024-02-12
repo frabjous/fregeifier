@@ -365,7 +365,6 @@ span.errorword {
             errMsg += ((errMsg == '') ? '' : '; ') +
                 (("errmsg" in respObj) ?
                     respObj.errmsg : 'Unknown error' );
-            return;
         }
         if (error) {
             reportError(errMsg);
