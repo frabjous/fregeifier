@@ -21,13 +21,22 @@ function determine_datadir() {
     return false;
 }
 
+function newkey() {
+    global $datadir;
+    $rv = '';
+    do {
+        $rv = random_string(12);
+    } while (is_dir("$datadir/temporary/$rv"));
+    return $rv;
+}
+
 function purge_old_temporary_files($dir, $time) {
     if (!is_dir($dir)) { return; }
     $contents = scandir($dir);
     foreach($contents as $content) {
         if (filemtime("$dir/$content") > $time) { continue; }
-        if ($content == '.' || $continue == '..') { continue; }
-        if (is_dir($content)) {
+        if ($content == '.' || $content == '..') { continue; }
+        if (is_dir("$dir/$content")) {
             purge_old_temporary_files("$dir/$content", $time);
             rmdir("$dir/$content");
         } else {
@@ -36,11 +45,20 @@ function purge_old_temporary_files($dir, $time) {
     }
 }
 
-// setup
+function random_string($n = 12) {
+    $pickfrom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' . 
+        'abcdefghijklmnopqrstuvwxyz0123456789';
+    $rv = '';
+    while (strlen($rv) < $n) {
+        $rv .= $pickfrom[random_int(0, (strlen($pickfrom) -1))];
+    }
+    return $rv;
+}
 
+// setup and cleanup
 $datadir = determine_datadir();
 if ($datadir === false) {
     rage_quit('Cannot find or create data folder.');
 }
-purge_old_temporary_files("$datadir/temporary", (time()- 2));
+purge_old_temporary_files("$datadir/temporary", (time()- 86400));
 
