@@ -22,7 +22,6 @@ function rage_quit($msg) {
 
 // read request
 $inputbody = file_get_contents('php://input') ?? '{}';
-file_put_contents('/home/kck/tmp/req.json', $inputbody);
 $opts = json_decode($inputbody) ?? false;
 if (!$opts) {
     rage_quit('Invalid JSON request.');
@@ -56,7 +55,7 @@ if ($record->{$opts->latexcode}->{'display'}->{$image_extension} === false) {
 }
 
 $response->filename = $filename;
-$response->url = 'getimage.php?tempkey=' .$tempkey . '&ext=' .
+$response->url = 'getimage.php?tempkey=' .$tempkey . '&imageext=' .
     $image_extension;
 
 chdir($oldpwd);

@@ -7,7 +7,7 @@
 // serves images created by the fregeifier's web interface //
 /////////////////////////////////////////////////////////////
 
-$ops = new StdClass();
+$opts = new StdClass();
 
 function rage_quit($msg) {
     http_response_code(404);
@@ -16,6 +16,23 @@ function rage_quit($msg) {
     exit(0);
 }
 
+// read details of submission
+foreach(array('latexcode','thickness','extra',
+    'linewidth','font','imageext','packages') as $thisopt) {
+    if (isset($_GET[$thisopt])) {
+        $opts->{$thisopt] = $_GET[$thisopt];
+    }
+}
+
+$download = (isset($_GET["dl"]) && ($_GET["dl"] == 'true'));
+
+$tempkey = '';
+if (isset($_GET["tempkey"])) {
+    $tempkey = $_GET["tempkey"];
+}
+
+$image_extension = 'svg';
+if (isset($opts->imageext)) { $image_extension = $opts->imageext; }
 
 // read request
 $inputbody = file_get_contents('php://input') ?? '{}';
