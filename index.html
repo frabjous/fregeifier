@@ -336,9 +336,6 @@ span.errorword {
         b.innerHTML = 'processing …';
         b.title = '';
         b.disabled = true;
-        b.disabled = false;
-        b.innerHTML = 'create image';
-        b.title = 'click to process image creation';
         let respObj = {};
         let errMsg = '';
         let error = false;
@@ -359,6 +356,9 @@ span.errorword {
             error = true;
             errMsg = err.toString();
         }
+        b.disabled = false;
+        b.innerHTML = 'create image';
+        b.title = 'click to process image creation';
         if (("error" in respObj) && (respObj.error)) {
             error = true;
             errMsg += ((errMsg == '') ? '' : '; ') +
@@ -395,6 +395,7 @@ span.errorword {
             parent: outputarea
         });
         const dlbtn = newelem('button', {
+            parent: btndiv,
             type: 'button',
             innerHTML: 'download',
             dlurl: url + '&dl=true',
@@ -619,8 +620,7 @@ span.errorword {
         </main>
         <footer>
             <div class="wrapper">
-                <p>The Fregeifier and this webpage created by <a href="https://people.umass.edu/klement">Kevin C. Klement</a>, and all its code is open source and may be freely reused, modified and redistributed according to the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL v3 license.</a></p>
-                <p>The code repository for the Fregeifier can be found at <a href="https://github.com/frabjous/fregeifier">https://github.com/frabjous/fregeifier</a>.</p>
+                <p>The Fregeifier and this webpage created by <a href="https://people.umass.edu/klement">Kevin C. Klement</a>, and all its code is open source and may be freely reused, modified and redistributed according to the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL v3 license</a>. The code repository for the Fregeifier can be found at <a href="https://github.com/frabjous/fregeifier">https://github.com/frabjous/fregeifier</a>.</p>
             </div>
         </footer>
 
