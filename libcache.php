@@ -7,6 +7,8 @@
 // Common functions involving cached fregeifier files on server       //
 ////////////////////////////////////////////////////////////////////////
 
+require_once('libfregeify.php');
+
 function determine_datadir() {
     if (is_dir('../../data/fregeifier')) {
         return realpath('../../data/fregeifier');
@@ -19,6 +21,58 @@ function determine_datadir() {
         return realpath($home_cache);
     }
     return false;
+}
+
+function header_from_opts($opts) {
+    $foundgg = false;
+    $hdrs = '';
+    $fontopts = array(
+        "baskerville" => '\usepackage[lf]{Baskervaldx}' .PHP_EOL .
+            '\usepackage[bigdelims,vvarbb]{newtxmath}' . PHP_EOL .
+            '\usepackage[cal=boondoxo]{mathalfa}' . PHP_EOL,
+        "computermodern" => '',
+        "fira"=>'\usepackage[sfdefault,lining]{FiraSans}' . PHP_EOL .
+            '\usepackage[fakebold]{firamath-otf}' . PHP_EOL .
+            '% xelatex' . PHP_EOL,
+        "garamond"=> '\usepackage[cmintegrals,cmbraces]{newtxmath}' . PHP_EOL .
+                '\usepackage{ebgaramond-maths}' . PHP_EOL,
+        "noto"=> '\usepackage{notomath}' . PHP_EOL,
+        "palatino"=>'\usepackage{newpxtext,newpxmath}' . PHP_EOL,
+        "times"=>'\usepackage{newtxtext,newtxmath}' . PHP_EOL,
+        "schoolbook"=>'\usepackage{fouriernc}' . PHP_EOL
+    );
+    if (isset($opts->font)) {
+        $hdrs .= ((isset($fontopts[$opts->font])) ?
+            $fontopts[$opts->font] ? : '');
+    }
+    if (isset($opts->packages) && ($opts->packages != '')) {
+        $pkgs = explode(',', $opts->packages;
+        foreach($pkgs as $pkg) {
+            if (trim($pkg) == 'grundgesetze') {
+                $foundgg = true;
+            }
+            $hdrs .= '\usepackage{' . trim($pkg) . '}';
+        }
+    }
+    if (isset($opts->extra) && ($opts->extra != '')) {
+        $hdrs .= $opts->extra;
+        if (str_contains($opts->extra, 'grundgesetze')) {
+            $foundgg = true;
+        }
+    }
+    if ($foundgg) {
+        if (isset($opts->thickness) && ($opts->thickness != '')) {
+            $hdrs .= '\setlength{\GGthickness}{' .
+                $opts->thickness . '}' . PHP_EOL;
+        }
+        if (isset($opts->linewidth) && ($opts->linewidth != '')) {
+            $hdrs .= '\setlength{\GGbeforelen}{' .
+                $opts->linewidth . '}' . PHP_EOL .
+                '\setlength{\GGafterlen}{' . $opts->linewidth .
+                '}' . PHP_EOL;
+        }
+    }
+    return $hdrs;
 }
 
 function newkey() {

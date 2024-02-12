@@ -26,6 +26,10 @@ $opts = json_decode($inputbody) ?? false;
 if (!$opts) {
     rage_quit('Invalid JSON request.');
 }
+if ((!isset($opts->latexcode)) || ($opts->latexcode == '')) {
+    rage_quit('No LaTeX code sent.');
+}
+
 
 $template = get_template();
 $image_extension = (isset($opts->imageext) ? $opts->imageext : 'svg');
@@ -37,4 +41,6 @@ $extra_headers = headers_from_opts($opts);
 // operate in the temporary folde
 chdir("$datadir/temporary/$tempkey");
 chdir($oldpwd);
+
+
 

@@ -327,6 +327,10 @@ span.errorword {
             alert('Cannot process without any code!');
             return;
         }
+        if (req.latexcode.length > 2000) {
+            alert('Code is limited to 2000 characters.');
+            return;
+        }
         const b =
             document.getElementById("proce" + "ssb" + "utton");
         b.innerHTML = 'processing …';
