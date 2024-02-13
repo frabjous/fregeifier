@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////
 
 function rage_quit($msg) {
-    fwrite(STDERR, $msg . PHP_EOL);
+    error_log($msg . PHP_EOL);
     exit(1);
 }
 
