@@ -15,6 +15,7 @@ function rage_quit($msg) {
 
 // do not serve anything from server
 if (isset($_SERVER['SERVER_PORT'])) {
+    echo "filter cannot be run over server";
     rage_quit('filter cannot be run over server');
 };
 
