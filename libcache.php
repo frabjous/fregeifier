@@ -35,7 +35,9 @@ function headers_from_opts($opts) {
             '\usepackage[fakebold]{firamath-otf}' . PHP_EOL .
             '% xelatex' . PHP_EOL,
         "garamond"=> '\usepackage[cmintegrals,cmbraces]{newtxmath}' . PHP_EOL .
-                '\usepackage{ebgaramond-maths}' . PHP_EOL,
+            '\usepackage{ebgaramond-maths}' . PHP_EOL,
+        "libertinus"=>'\usepackage{libertinus}' . PHP_EOL .
+            '\usepackage{libertinust1math}' . PHP_EOL,
         "noto"=> '\usepackage{notomath}' . PHP_EOL,
         "palatino"=>'\usepackage{newpxtext,newpxmath}' . PHP_EOL,
         "times"=>'\usepackage{newtxtext,newtxmath}' . PHP_EOL,

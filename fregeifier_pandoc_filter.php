@@ -13,6 +13,11 @@ function rage_quit($msg) {
     exit(1);
 }
 
+// do not serve anything from server
+if (isset($_SERVER['SERVER_PORT'])) {
+    rage_quit('filter cannot be run over server');
+};
+
 // read json from stdin
 $stdin = file_get_contents('php://stdin');
 $obj = json_decode($stdin) ?? false;
