@@ -46,7 +46,6 @@ function normalize(s) {
 }
 
 class Parse {
-
     // start by recording what string got parsed
     constructor(s) {
         // input string is what were given, except with soft
@@ -64,28 +63,13 @@ class Parse {
         if ("_boundvar" in this) {
             return this._boundvar;
         }
-        // only quantified formulas have bound variables
-        if (!Formula.syntax.isquant(this.op)) {
-            this._boundvar = false;
-            return this._boundvar;
+        if ((this.op == '∀') && (this.opspot == 0) && 
+            (/[A-Za-z]/.test(this.parsedstr.at(1)))) {
+            this._boundar = this.parsedstr.at(1);
+            return this._boundar;
+
         }
-        // look for string matching quantifier at start
-        const q = this.parsedstr.match(Formula.syntax.qaRegEx);
-        // if one is found look for variable
-        if (q) {
-            const v = q[0].match(Formula.syntax.varRegEx);
-            // if variable found, return it
-            if (v) {
-                this._boundvar = v[0];
-                return this._boundvar;
-            }
-        }
-        // no quantifier or variable was found, but not returned
-        // already means this is poorly formed
         this._boundvar = false;
-        this.syntaxError('a quantifier is used without a ' +
-            'variable in the range ' + Formula.syntax.notation.variableRange +
-            ' following it or has stray characters before it');
         return this._boundvar;
     }
 
