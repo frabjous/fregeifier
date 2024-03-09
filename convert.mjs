@@ -176,6 +176,41 @@ export class Parse {
 
 }
 
+function handleunicode(s, gothics) {
+    let rv = s.replace(/ἀ/g, '\\spirituslenis{\\alpha}');
+    rv = rv.replace(/ἐ/g, '\\spirituslenis{\\epsilon}');
+    rv = rv.replace(/ἠ/g, '\\spirituslenis{\\eta}');
+    rv = rv.replace(/ὠ/g, '\\spirituslenis{\\omega}');
+    rv = rv.replace(/α/g, '\\alpha ');
+    rv = rv.replace(/ε/g, '\\epsilon ');
+    rv = rv.replace(/η/g, '\\eta ');
+    rv = rv.replace(/ω/g, '\\omega ');
+    return rv;
+}
+
+export function converttogg(f, addjudge, startline, gothics) {
+    if (!f.op) { return handleunicode(f.parsedstr); }
+    let rv ='';
+    // smoothbreathers
+    if (operators.indexOf(f.op) >= 4) {
+        // should not have a left, but in case it does
+        if ((f.left) && (f.left.parsedstr != '')) {
+            rv .= converttogg(f.left, false, true);
+        }
+        rv .= handleunicode(f.op);
+        // handle right; add parens if has operator
+        if ((f.right) && (f.right.parsedstr != '')) {
+            if (r.right.op) {
+                rv .= '\\GGbracket{';
+            }
+            rv .= parsedstr
+            if (r.right.op) {
+                rv .= '}';
+            }
+        }
+    }
+}
+
 const s = normalize('((∀x)¬(¬[ἀ(α=α) = ἐf(ε)] → ¬Fx))');
 const fml = new Parse(s);
 
@@ -199,4 +234,4 @@ pretty(fml,0);
 // negation/conditional = (before + after)
 // judge = after + thickness
 // add 3 at end
-// don't include judgement stroke?
+
