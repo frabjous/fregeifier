@@ -222,7 +222,7 @@ function formulawidth(f, addjudge) {
             beforeafter = parseFloat(document.getElementById('linewidth').value);
         }
     }
-    return portionwidth(f, beforeafter, thickness) + 3 +
+    return portionwidth(f, beforeafter, thickness) - 3 +
         ((addjudge) ? (beforeafter + thickness) : 0);
 }
 
@@ -248,21 +248,11 @@ export function converttogg(f, addjudge, startline, gothics) {
         // handle right; add parens if has operator
         if ((f.right) && (f.right.parsedstr != '')) {
             if (f.right.op) {
-                oppl = operators.indexOf(f.right.op);
-                if (oppl>=0 && oppl<3) {
-                    rv += '\\GGbracket{';
-                } else {
-                    rv += '(';
-                }
+                rv += '\\left(';
             }
             rv += converttogg(f.right, false, true, gothics);
             if (f.right.op) {
-                oppl = operators.indexOf(f.right.op);
-                if (oppl>=0 && oppl<3) {
-                    rv += '}';
-                } else {
-                    rv += ')';
-                }
+                rv += '\\right)';
             }
         }
         if (startline === false) {
@@ -277,20 +267,16 @@ export function converttogg(f, addjudge, startline, gothics) {
         // parens
         if ((f.left) && (f.left.parsedstr != '')) {
             const addparens = (f.left.op && (operators.indexOf(f.left.op)<=3));
-            if (addparens) { rv +=
-                    ((f.left.op == '=') ? '(' : '\\GGbracket{') };
+            if (addparens) { rv += '\\left('; };
             rv += converttogg(f.left, false, true, gothics);
-            if (addparens) { rv +=
-                    ((f.left.op == '=') ? ')' : '}') };
+            if (addparens) { rv += '\\right)'; };
         }
         rv += ' = ';
         if ((f.right) && (f.right.parsedstr != '')) {
             const addparens = (f.right.op && (operators.indexOf(f.right.op)<=3));
-            if (addparens) { rv +=
-                    ((f.right.op == '=') ? '(' : '\\GGbracket{') };
+            if (addparens) { rv += '\\left(' ; };
             rv += converttogg(f.right, false, true, gothics);
-            if (addparens) { rv +=
-                    ((f.right.op == '=') ? ')' : '}') };
+            if (addparens) { rv += '\\right)'; };
         }
         if (startline === false) {
             rv = '\\GGterm{' + rv + '}';
@@ -361,7 +347,7 @@ export function converttogg(f, addjudge, startline, gothics) {
     return rv;
 }
 
-const s = normalize('∀xFx = ∀x¬¬Gx');
+const s = normalize('ἀ(a=a) = ∀x(Fx → ¬(¬¬Gxy → ¬Fx))');
 const fml = new Parse(s);
 
 console.log('opspot is ' + fml.opspot.toString());
