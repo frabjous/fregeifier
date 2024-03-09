@@ -364,6 +364,7 @@ export function converttogg(f, addjudge, startline, gothics) {
     return rv;
 }
 
+/*
 const s = normalize('(Fy → y = ἀ(a=a)) → ∀x(Fx → Gx)');
 const fml = new Parse(s);
 
@@ -387,4 +388,4 @@ pretty(fml,0);
 
 console.log(converttogg(fml, true, true, []));
 
-
+*/
