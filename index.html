@@ -319,7 +319,7 @@ li {
 
     async function sendRequest() {
         const req = {
-            latexcode: valueOfElem('latexcode'),
+            latexcode: valueOfElem('latexcode').trim(),
             imageext: valueOfElem('imageext'),
             font: valueOfElem('font'),
             packages: valueOfElem('packages'),
@@ -628,9 +628,10 @@ li {
                 <div id="formarea"></div>
                 <div id="outputarea"></div>
                 <h3 id="commands">Commands</h3>
-                <p>Summary of commands from <tt>grundgesetze</tt> package. For more info, and more advanced usage, see <a href="http://mirrors.ctan.org/macros/latex/contrib/grundgesetze/grundgesetze.pdf">its documentation</a>.</p>
+                <p>Summary of commands from <span class="tt">grundgesetze</span> package. For more info, and more advanced usage, see <a href="http://mirrors.ctan.org/macros/latex/contrib/grundgesetze/grundgesetze.pdf">its documentation</a>.c</p>
                 <p class="cmdlist"><span class="holder"><img src="images/gglist.svg"></span></p>
-                <p>Summary of commands from <tt>fge</tt> package. For more info, see <a href="http://mirrors.ctan.org/fonts/fge/fge-doc.pdf">its documentation</a>.</p>
+                <p> Note that to use <span class="tt">\GGterm{...}</span> to align terminal portions, the <span class="tt">\GGlinewidth</span> length should be set, e.g., <span class="tt">\setlength{\GGlinewidth}{60pt}</span>.</p>
+                <p>Summary of commands from <span class="tt">fge</span> package. For more info, see <a href="http://mirrors.ctan.org/fonts/fge/fge-doc.pdf">its documentation</a>.</p>
                 <p class="cmdlist"><span class="holder"><img src="images/fgelist.svg"></span></p>
                 <h3>Additional Info</h3>
                 <ul>
@@ -641,7 +642,7 @@ li {
                     <li>If you would appreciate more font or image type choices, let me know <a href="mailto:klement@umass.edu">by email</a> or by filing an issue on the project’s <a href="https://github.com/frabjous/fregeifier/issues">issue tracker</a>.
                 </ul>
                 <h3>Acknowledgements/Thanks</h3>
-                <p>A debt of gratitude is owed to the creators of LaTeX packages such as <tt>fge</tt> and <tt>grundgesetze</tt>, including J. J. Green, Marcus Rossberg, and others. Fans of Russell may also consider loading the <a href="https://ctan.org/pkg/principia?lang=en">principia</a> package by Landon Elkind and using it as well.</p>
+                <p>A debt of gratitude is owed to the creators of LaTeX packages such as <span class="tt">fge</span> and <span class="tt">grundgesetze</span>, including J. J. Green, Marcus Rossberg, and others. Fans of Russell may also consider loading the <a href="https://ctan.org/pkg/principia?lang=en">principia</a> package by Landon Elkind and using it as well.</p>
             </div>
         </main>
         <footer>
