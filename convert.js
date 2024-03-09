@@ -3,7 +3,9 @@
 // Public License along with this program. If not, see
 // https://www.gnu.org/licenses/.
 
-    // changes all soft parentheses
+const operators = ['→','¬','=','ἀ','ἐ','ἠ','ὠ'];
+
+// changes all soft parentheses
 function allsoftparens(s) {
     return s.replace(/[\{\[]/g,'(').replace(/[}\]]/g,')');
 }
@@ -73,68 +75,6 @@ class Parse {
         return this._boundvar;
     }
 
-    // gets how many parentheses levels this descends into
-    get depth() {
-        // return old result if found already
-        if ("_depth" in this) {
-            return this._depth;
-        }
-        // binary operators add a layer
-        if (Formula.syntax.isbinaryop(this.op)) {
-            this._depth = Math.max(this.left.depth, this.right.depth) + 1;
-            return this._depth;
-        }
-        // monadic operators do not
-        if (Formula.syntax.ismonop(this.op)) {
-            this._depth = this.right.depth;
-            return this.depth;
-        }
-        // zero-place operators and atomic formulae have no depth
-        this._depth = 0;
-        return this._depth;
-    }
-
-    // gets all free variables in a formula
-    get freevars() {
-        // return old result if already calculated
-        if ("_freevars" in this) {
-            return this._freevars;
-        }
-        // for moleculars, combine the two sides
-        if (Formula.syntax.isbinaryop(this.op)) {
-            const lfv = (this.left) ? this.left.freevars : [];
-            const rfv = (this.right) ? this.right.freevars : [];
-            this._freevars = arrayUnion(lfv, rfv);
-            return this._freevars;
-        }
-        // for quantifiers, return everything minus the one bound
-        // by this quantifier
-        if (Formula.syntax.isquant(this.op)) {
-            const rfv = (this.right) ? this.right.freevars : [];
-            let filtered = rfv;
-            if (this.boundvar) {
-                filtered = filtered.filter((v) => (v != this.boundvar));
-            }
-            this._freevars = filtered;
-            return this._freevars;
-        }
-        // for other monadic ops, just return what it applies to
-        if (Formula.syntax.ismonop(this.op)) {
-            this._freevars = ((this.right) ? this.right.freevars : []);
-            return this._freevars;
-        }
-        // for zero-place ops, return empty array
-        if (this.op) {
-            this._freevars = [];
-            return this._freevars;
-        }
-        // atomic; too simple for functions **
-        this._freevars = this.terms.filter(
-            (x) => (Formula.syntax.isvar(x))
-        );
-        return this._freevars;
-    }
-
     // reads formula to left of main operator
     get left() {
         // return saved value if already calculated
@@ -154,109 +94,18 @@ class Parse {
         return this._left;
     }
 
-    // normal form is the canonical representation of Formula as a
-    // string should be identical for identical formulae
-    get normal() {
-        if ("_normal" in this) {
-            return this._normal;
-        }
-        // get left and right sides and
-        // add parentheses if needed (when binary)
-        let leftstr = '';
-        if (this.left) {
-            if (Formula.syntax.isbinaryop(this.left.op)) {
-                leftstr = this.left.wrapit();
-            } else {
-                leftstr = this.left.normal;
-            }
-        }
-        let rightstr = '';
-        if (this.right) {
-            if (Formula.syntax.isbinaryop(this.right.op)) {
-                rightstr = this.right.wrapit();
-            } else {
-                rightstr = this.right.normal;
-            }
-        }
-        // binary op
-        if (Formula.syntax.isbinaryop(this.op)) {
-            this._normal = leftstr + ' ' + this.op + ' ' + rightstr;
-            return this._normal;
-        }
-        // monadic op
-        if (Formula.syntax.ismonop(this.op)) {
-            let o = this.op;
-            if (Formula.syntax.isquant(o)) {
-                let v = this.boundvar ?? '';
-                o = Formula.syntax.mkquantifier(v, o);
-            }
-            this._normal = o + rightstr;
-            return this._normal;
-        }
-        // zero-adic op, which just is the result we're after
-        if (this.op) {
-            this._normal = this.op;
-            return this._normal;
-        }
-        // otherwise, atomic
-        const terms = this.terms ?? [];
-        const pletter = this.pletter ?? '';
-        // check if there should be commas between
-        let joiner = '';
-        if (Formula.syntax.notation.useTermParensCommas) {
-            joiner = ',';
-        }
-        // join terms into single string
-        let termsstr = this.terms.join(joiner);
-        // add parentheses around terms if need be
-        if ((Formula.syntax.notation.useTermParensCommas) &&
-            (this.terms.length > 0)) {
-            termsstr = '(' + termsstr + ')';
-        }
-        // put them together
-        let atomicstr = pletter + termsstr;
-        // identity is different
-        if ((terms.length == 2) && (pletter == '=')) {
-            atomicstr = this.terms[0] + ' = ' + this.terms[1];
-        }
-        // return value
-        this._normal = atomicstr;
-        return this._normal;
-    }
-
     // gets main operator by determining the main operator
     // spot and gets that character
     get op() {
         // if nothing to parse, mainop is falsey
-        if (!this.parsedstr) { return false; }
+        if ((!this.parsedstr) || (this.parsedstr == '')) { return false; }
         // return saved val
         if ("_op" in this) { return this._op; }
         const opspot = this.opspot;
         // if not found, treat main op as falsy
         if (opspot == -1) { return false; }
-        // if there is operator right there, return it
-        if (this.parsedstr[opspot] in Formula.syntax.operators) {
-            this._op = this.parsedstr[opspot];
-            return this._op;
-        }
-        // otherwise, try to parse remainder as starting with
-        // a quantifier
-        const remainder = this.parsedstr.substring(this.opspot);
-        const m = remainder.match(Formula.syntax.qaRegEx);
-        // if remainder
-        if (m) {
-            // if it contains the existential quantifier it is
-            // an existential
-            if (m[0].search(Formula.syntax.symbols.EXISTS) >= 0) {
-                this._op = Formula.syntax.symbols.EXISTS;
-                return this._op;
-            }
-            // if it doesn't it must be universal
-            this._op = Formula.syntax.symbols.FORALL;
-            return this._op;
-        }
-        // shouldn't be here, but just in case
-        this._op = false;
+        // return character there
+        this._op = this.parsedstr[opspot];
         return this._op;
     }
 
@@ -273,13 +122,12 @@ class Parse {
         // the main op depth *should* always be zero; but might
         // not be if formula is unbalanced, but we soldier on
         // in case it's a "recoverable error"
-        let mainopdepth = -1;
+        let mainopdepth = 999;
         for (let i=0; i<this.parsedstr.length; i++) {
             // get this character, and the remainder of the string
             const c = this.parsedstr.at(i);
             const remainder = this.parsedstr.substring(i);
             // letter before to check if right after a predicate
-            const b = ((i==0) ? '' : this.parsedstr.at(i-1));
             if (c == '(') {
                 // increase depth with left parenthesis
                 currdepth++;
@@ -287,73 +135,15 @@ class Parse {
                 // decrease depth with right parenthesis
                 currdepth--;
             }
-            // if more right parens than left, that's a problem
-            if (currdepth < 0) {
-                this.syntaxError("unbalanced parentheses (extra right parenthesis)");
-            }
-            // check if we're right at an operator, or if not,
-            // if we're at the start of a quantifier
-            let isop = Formula.syntax.isop(c);
-            let startswithq = remainder.match(Formula.syntax.qaRegEx);
-            // don't count ∃ as an operator if matching (∃x) at the
-            // parenthesis as well
-            if (parensinqs && c == Formula.syntax.symbols.EXISTS &&
-                !startswithq) { isop = false; }
-            // quantifiers starting with parentheses really have
-            // one less depth
-            const realdepth = (
-                (startswithq && parensinqs) ? currdepth -1 : currdepth
-            );
-            // determine operator, either the symbol, or the quantifier
-            let thisop = c;
-            if (startswithq) {
-                let m = startswithq[0];
-                if (m.search(Formula.syntax.symbols.EXISTS) >= 0) {
-                    thisop = Formula.syntax.symbols.EXISTS;
-                } else {
-                    thisop = Formula.syntax.symbols.FORALL;
-                }
-            }
-            // doesn't really start with a quantifier if we have (x)
-            // right after a predicate
-            if (startswithq && parensinqs &&
-                thisop == Formula.syntax.symbols.FORALL &&
-                Formula.syntax.pletterRegEx.test(b)) {
-                startswithq = false;
-                isop = false;
-            }
+            const isop = (c in operators);
             // found something at this spot
-            if (isop || startswithq) {
-                // if "more main" or first one found, then it
-                // becomes our candidate
-                const newopcat = Formula.syntax.symbolcat[
-                    Formula.syntax.operators[thisop]
-                ];
-                if ((realdepth < mainopdepth) || (mainopdepth == -1)) {
-                    this._opspot = i;
-                    mainopdepth = realdepth;
-                    mainopcat = newopcat;
-                } else if (realdepth == mainopdepth) {
-                    // or it depends on adicity
-                    if (newopcat == 2 && mainopcat == 2) {
-                        this.syntaxError('two binary operators occur ' +
-                            'without enough parentheses to ' +
-                            'determine which has wider scope');
-                    }
-                    // greater adicity means greater scope by default
-                    if (newopcat > mainopcat) {
-                        this._opspot = i;
-                        mainopdepth = realdepth;
-                        mainopcat = newopcat;
-                    }
-                }
+            if ((isop) && ((currdepth < mainopdepth) ||
+                ((currdepth == mainopdepth) &&
+                    (this.parsedstr.at(this._opspot) != '→') &&
+                    (c == '→')))) {
+                this._opspot = i;
+                mainopdepth = currdepth;
             }
-        }
-        // since we removed matching parentheses, we'd only
-        // not be at depth zero if there was an extra left
-        // parenthesis
-        if (mainopdepth > 0) {
-            this.syntaxError('unbalanced parentheses (unclosed left parenthesis)');
         }
         return this._opspot;
     }
