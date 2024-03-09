@@ -194,3 +194,6 @@ function pretty(f,ia) {
 }
 
 pretty(fml,0);
+
+// quant = (before + after + 11) - (2*thickness)
+//
