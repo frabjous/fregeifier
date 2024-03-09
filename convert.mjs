@@ -185,30 +185,93 @@ function handleunicode(s, gothics) {
     rv = rv.replace(/ε/g, '\\epsilon ');
     rv = rv.replace(/η/g, '\\eta ');
     rv = rv.replace(/ω/g, '\\omega ');
+    if (gothics !== false) {
+        for (const gothic of gothics) {
+            const regex = new RegExp(gothic, 'g');
+            rv = rv.replace(regex, '\\mathfrak{' + gothic + '}');
+        }
+    }
     return rv;
 }
 
+function formulawidth(f) {
+    // TODO
+    return 60;
+}
+
 export function converttogg(f, addjudge, startline, gothics) {
-    if (!f.op) { return handleunicode(f.parsedstr); }
     let rv ='';
+    if (!f.op) {
+        if (addjudge) { rv += '\\GGjudge'; }
+        rv += ' ' + handleunicode(f.parsedstr);
+        if (startline === false) {
+            rv = '\\GGterm{' + rv + '}';
+        }
+        return rv;
+    }
     // smoothbreathers
     if (operators.indexOf(f.op) >= 4) {
+        if (addjudge) { rv += '\\GGjudge'; }
         // should not have a left, but in case it does
         if ((f.left) && (f.left.parsedstr != '')) {
-            rv .= converttogg(f.left, false, true);
+            rv += converttogg(f.left, false, true, gothics);
         }
-        rv .= handleunicode(f.op);
+        rv += ' ' + handleunicode(f.op);
         // handle right; add parens if has operator
         if ((f.right) && (f.right.parsedstr != '')) {
-            if (r.right.op) {
-                rv .= '\\GGbracket{';
+            if (f.right.op) {
+                rv += '\\GGbracket{';
             }
-            rv .= parsedstr
-            if (r.right.op) {
-                rv .= '}';
+            rv += converttogg(f.right, false, true, gothics);
+            if (f.right.op) {
+                rv += '}';
             }
         }
+        if (startline === false) {
+            rv = '\\GGterm{' + rv + '}';
+        }
+        return rv;
     }
+    // identity
+    if (f.op == '=') {
+        if (addjudge) { rv += '\\GGjudge'; }
+        // for everything with an operator not a smooth breathing add
+        // parens
+        if ((f.left) && (f.left.parsedstr != '')) {
+            const addparens = (f.left.op && (operators.indexOf(f.left.op)<=3));
+            if (addparens) { rv += '\\GGbracket{' };
+            rv += converttogg(f.left, false, true, gothics);
+            if (addparens) { rv += '}' };
+        }
+        rv += ' = ';
+        if ((f.right) && (f.right.parsedstr != '')) {
+            const addparens = (f.right.op && (operators.indexOf(f.right.op)<=3));
+            if (addparens) { rv += '\\GGbracket{' };
+            rv += converttogg(f.right, false, true, gothics);
+            if (addparens) { rv += '}' };
+        }
+        if (startline === false) {
+            rv = '\\GGterm{' + rv + '}';
+        }
+        return rv;
+    }
+    // others might start a GG portion
+    if (startline) {
+        rv += '{\\setlength{\\GGlinewidth}{' + formulawidth(f).toString() +
+            'pt}';
+    }
+    // add judgment stroke if need be
+    if (addjudge) {
+        rv += '\\GGjudge';
+    }
+    if (f.op == '¬') {
+        rv += '\\GGnot'
+    }
+    // end start line brackets if need be
+    if (startline) {
+        rv += '}';
+    }
+    return rv;
 }
 
 const s = normalize('((∀x)¬(¬[ἀ(α=α) = ἐf(ε)] → ¬Fx))');
