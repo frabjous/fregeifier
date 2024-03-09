@@ -65,8 +65,8 @@ class Parse {
         }
         if ((this.op == '∀') && (this.opspot == 0) && 
             (/[A-Za-z]/.test(this.parsedstr.at(1)))) {
-            this._boundar = this.parsedstr.at(1);
-            return this._boundar;
+            this._boundvar = this.parsedstr.at(1);
+            return this._boundvar;
 
         }
         this._boundvar = false;
