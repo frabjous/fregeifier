@@ -177,7 +177,14 @@ export class Parse {
 }
 
 function handleunicode(s, gothics) {
-    let rv = s.replace(/ἀ/g, '\\spirituslenis{\\alpha}');
+    let rv = s;
+    if (gothics !== false) {
+        for (const gothic of gothics) {
+            const regex = new RegExp(gothic, 'g');
+            rv = rv.replace(regex, '\\mathfrak{' + gothic + '}');
+        }
+    }
+    rv = rv.replace(/ἀ/g, '\\spirituslenis{\\alpha}');
     rv = rv.replace(/ἐ/g, '\\spirituslenis{\\epsilon}');
     rv = rv.replace(/ἠ/g, '\\spirituslenis{\\eta}');
     rv = rv.replace(/ὠ/g, '\\spirituslenis{\\omega}');
@@ -185,22 +192,35 @@ function handleunicode(s, gothics) {
     rv = rv.replace(/ε/g, '\\epsilon ');
     rv = rv.replace(/η/g, '\\eta ');
     rv = rv.replace(/ω/g, '\\omega ');
-    if (gothics !== false) {
-        for (const gothic of gothics) {
-            const regex = new RegExp(gothic, 'g');
-            rv = rv.replace(regex, '\\mathfrak{' + gothic + '}');
-        }
-    }
     return rv;
 }
 
-function formulawidth(f) {
+function formulawidth(f, addjudge) {
+    let beforeafter = 5;
+    let thickness = 0.6;
+    if (typeof document != 'undefined') {
+        if (document?.getElementById('thickness')) {
+            thickness = parseFloat(document.getElementById('thickness').value);
+        }
+        if (document?.getElementById('linewidth')) {
+            beforeafter = parseFloat(document.getElementById('linewidth').value);
+        }
+    }
+    return portionwidth(f, beforeafter, thickness) + 3 +
+        ((addjudge) ? (beforeafter + thickness) : 0);
+}
+    // quant = (before + after + 8) - (2*thickness)
+// negation/conditional = (before + after)
+// judge = after + thickness
+// add 3 at end
+
     // TODO
     return 60;
 }
 
 export function converttogg(f, addjudge, startline, gothics) {
     let rv ='';
+    let oppl = -1;
     if (!f.op) {
         if (addjudge) { rv += '\\GGjudge'; }
         rv += ' ' + handleunicode(f.parsedstr, gothics);
@@ -220,11 +240,21 @@ export function converttogg(f, addjudge, startline, gothics) {
         // handle right; add parens if has operator
         if ((f.right) && (f.right.parsedstr != '')) {
             if (f.right.op) {
-                rv += '\\GGbracket{';
+                oppl = operators.indexOf(f.right.op);
+                if (oppl>=0 && oppl<3) {
+                    rv += '\\GGbracket{';
+                } else {
+                    rv += '(';
+                }
             }
             rv += converttogg(f.right, false, true, gothics);
             if (f.right.op) {
-                rv += '}';
+                oppl = operators.indexOf(f.right.op);
+                if (oppl>=0 && oppl<3) {
+                    rv += '}';
+                } else {
+                    rv += ')';
+                }
             }
         }
         if (startline === false) {
@@ -239,16 +269,20 @@ export function converttogg(f, addjudge, startline, gothics) {
         // parens
         if ((f.left) && (f.left.parsedstr != '')) {
             const addparens = (f.left.op && (operators.indexOf(f.left.op)<=3));
-            if (addparens) { rv += '\\GGbracket{' };
+            if (addparens) { rv +=
+                    ((f.left.op == '=') ? '(' : '\\GGbracket{') };
             rv += converttogg(f.left, false, true, gothics);
-            if (addparens) { rv += '}' };
+            if (addparens) { rv +=
+                    ((f.left.op == '=') ? ')' : '}') };
         }
         rv += ' = ';
         if ((f.right) && (f.right.parsedstr != '')) {
             const addparens = (f.right.op && (operators.indexOf(f.right.op)<=3));
-            if (addparens) { rv += '\\GGbracket{' };
+            if (addparens) { rv +=
+                    ((f.right.op == '=') ? '(' : '\\GGbracket{') };
             rv += converttogg(f.right, false, true, gothics);
-            if (addparens) { rv += '}' };
+            if (addparens) { rv +=
+                    ((f.right.op == '=') ? ')' : '}') };
         }
         if (startline === false) {
             rv = '\\GGterm{' + rv + '}';
@@ -316,7 +350,7 @@ export function converttogg(f, addjudge, startline, gothics) {
     return rv;
 }
 
-const s = normalize('((∀x)¬(¬[ἀ(α=α) = ἐf(ε)] → ¬Fx))');
+const s = normalize('((∀a)¬(¬[ἀ(α=α) = ἐf(ε)] → ¬Fae))');
 const fml = new Parse(s);
 
 console.log('opspot is ' + fml.opspot.toString());
@@ -339,8 +373,4 @@ pretty(fml,0);
 
 console.log(converttogg(fml, true, true, []));
 
-// quant = (before + after + 8) - (2*thickness)
-// negation/conditional = (before + after)
-// judge = after + thickness
-// add 3 at end
 
