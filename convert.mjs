@@ -195,6 +195,22 @@ function handleunicode(s, gothics) {
     return rv;
 }
 
+function portionwidth(f, beforeafter, thickness) {
+    // only ∀, ¬, → add to width
+    if ((!f.op) || (operators.indexOf(f.op) >= 3)) {
+        return 0;
+    }
+    const lwidth = ((f.left) ?
+        portionwidth(f.left, beforeafter, thickness) : 0);
+    const rwidth = ((f.right) ?
+        portionwidth(f.right, beforeafter, thickness) : 0);
+    const cwidth = Math.max(lwidth, rwidth);
+    if (f.op == '∀') {
+        return cwidth + (2*(beforeafter)) + 8 - (2*(thickness));
+    }
+    return cwidth + (2*(beforeafter));
+}
+
 function formulawidth(f, addjudge) {
     let beforeafter = 5;
     let thickness = 0.6;
@@ -208,14 +224,6 @@ function formulawidth(f, addjudge) {
     }
     return portionwidth(f, beforeafter, thickness) + 3 +
         ((addjudge) ? (beforeafter + thickness) : 0);
-}
-    // quant = (before + after + 8) - (2*thickness)
-// negation/conditional = (before + after)
-// judge = after + thickness
-// add 3 at end
-
-    // TODO
-    return 60;
 }
 
 export function converttogg(f, addjudge, startline, gothics) {
@@ -291,7 +299,7 @@ export function converttogg(f, addjudge, startline, gothics) {
     }
     // others might start a GG portion
     if (startline) {
-        rv += '{\\setlength{\\GGlinewidth}{' + formulawidth(f).toString() +
+        rv += '{\\setlength{\\GGlinewidth}{' + formulawidth(f, addjudge).toString() +
             'pt}';
     }
     // add judgment stroke if need be
@@ -317,15 +325,18 @@ export function converttogg(f, addjudge, startline, gothics) {
         // are using gothis
         if (gothics === false) {
             rv += '\\GGquant{'
+            if (f.boundvar) {
+                rv += handleunicode(f.boundvar, gothics);
+            }
         } else {
             rv += '\\GGall{';
             // add bound variable to gothic swaps
+            if (f.boundvar) {
+                rv += f.boundvar;
+            }
             if ((f.boundvar) && (gothics.indexOf(f.boundvar) == -1)) {
                 gothics.push(f.boundvar);
             }
-        }
-        if (f.boundvar) {
-            rv += handleunicode(f.boundvar, gothics);
         }
         rv += '}';
         if (f.right && (f.right.parsedstr != '')) {
@@ -350,7 +361,7 @@ export function converttogg(f, addjudge, startline, gothics) {
     return rv;
 }
 
-const s = normalize('((∀a)¬(¬[ἀ(α=α) = ἐf(ε)] → ¬Fae))');
+const s = normalize('∀xFx = ∀x¬¬Gx');
 const fml = new Parse(s);
 
 console.log('opspot is ' + fml.opspot.toString());
