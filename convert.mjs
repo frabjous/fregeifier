@@ -198,5 +198,5 @@ pretty(fml,0);
 // quant = (before + after + 8) - (2*thickness)
 // negation/conditional = (before + after)
 // judge = after + thickness
-// dont add 3, but it is there
+// add 3 at end
 // don't include judgement stroke?
