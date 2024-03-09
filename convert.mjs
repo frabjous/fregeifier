@@ -203,7 +203,7 @@ export function converttogg(f, addjudge, startline, gothics) {
     let rv ='';
     if (!f.op) {
         if (addjudge) { rv += '\\GGjudge'; }
-        rv += ' ' + handleunicode(f.parsedstr);
+        rv += ' ' + handleunicode(f.parsedstr, gothics);
         if (startline === false) {
             rv = '\\GGterm{' + rv + '}';
         }
@@ -216,7 +216,7 @@ export function converttogg(f, addjudge, startline, gothics) {
         if ((f.left) && (f.left.parsedstr != '')) {
             rv += converttogg(f.left, false, true, gothics);
         }
-        rv += ' ' + handleunicode(f.op);
+        rv += ' ' + handleunicode(f.op, gothics);
         // handle right; add parens if has operator
         if ((f.right) && (f.right.parsedstr != '')) {
             if (f.right.op) {
@@ -265,7 +265,49 @@ export function converttogg(f, addjudge, startline, gothics) {
         rv += '\\GGjudge';
     }
     if (f.op == '¬') {
-        rv += '\\GGnot'
+        // shouldn't be a left, but in case thereis
+        if (f.left && (f.left.parsedstr != '')) {
+            rv += converttogg(f.left, false, false, gothics);
+        }
+        rv += '\\GGnot';
+        if (f.right && (f.right.parsedstr != '')) {
+            rv += converttogg(f.right, false, false, gothics);
+        }
+    }
+    if (f.op == '∀') {
+        // shouldn't be a left, but in case thereis
+        if (f.left && (f.left.parsedstr != '')) {
+            rv += converttogg(f.left, false, false, gothics);
+        }
+        // use either GGquant or GGall depending on whether we
+        // are using gothis
+        if (gothics === false) {
+            rv += '\\GGquant{'
+        } else {
+            rv += '\\GGall{';
+            // add bound variable to gothic swaps
+            if ((f.boundvar) && (gothics.indexOf(f.boundvar) == -1)) {
+                gothics.push(f.boundvar);
+            }
+        }
+        if (f.boundvar) {
+            rv += handleunicode(f.boundvar, gothics);
+        }
+        rv += '}';
+        if (f.right && (f.right.parsedstr != '')) {
+            rv += converttogg(f.right, false, false, gothics);
+        }
+    }
+    if (f.op == '→') {
+        rv += '\\GGconditional{';
+        if (f.left && (f.left.parsedstr != '')) {
+            rv += converttogg(f.left, false, false, gothics);
+        }
+        rv += '}{';
+        if (f.right && (f.right.parsedstr != '')) {
+            rv += converttogg(f.right, false, false, gothics);
+        }
+        rv += '}';
     }
     // end start line brackets if need be
     if (startline) {
@@ -276,6 +318,8 @@ export function converttogg(f, addjudge, startline, gothics) {
 
 const s = normalize('((∀x)¬(¬[ἀ(α=α) = ἐf(ε)] → ¬Fx))');
 const fml = new Parse(s);
+
+console.log('opspot is ' + fml.opspot.toString());
 
 function pretty(f,ia) {
     let gap = '';
@@ -292,6 +336,8 @@ function pretty(f,ia) {
 }
 
 pretty(fml,0);
+
+console.log(converttogg(fml, true, true, []));
 
 // quant = (before + after + 8) - (2*thickness)
 // negation/conditional = (before + after)
