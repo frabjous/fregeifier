@@ -143,11 +143,6 @@ class Parse {
         }
         // if nothing on left, or no main op, return something falsy
         if (this.opspot < 1) {
-            if (Formula.syntax.isbinaryop(this.op)) {
-                // SHOULD have a left, but does not
-                this.syntaxError('nothing to the left of ' +
-                    this.op);
-            }
             this._left = false;
             return this._left;
         }
@@ -155,7 +150,7 @@ class Parse {
         const leftstring =
             this.parsedstr.substring(0,this.opspot).trim();
         // use repository if already one for string in question
-        this._left = Formula.from(leftstring);
+        this._left = new Formula(leftstring);
         return this._left;
     }
 
@@ -363,43 +358,6 @@ class Parse {
         return this._opspot;
     }
 
-    // "pletter" is a generic term covering both predicates and the
-    // letter used in propositional atomic formulas (=0-place predicate)
-    get pletter() {
-        // return value if saved
-        if ("_pletter" in this) {
-            return this._pletter;
-        }
-        // nonatomic formulas do not have pletters, period, but that's OK
-        if (this.op) {
-            this._pletter = false;
-            return this._pletter;
-        }
-        // look for first character which is a predicate
-        const match = this.parsedstr.match(Formula.syntax.pletterRegEx);
-        // has no pletter, which is not ok
-        if (!match) {
-            this._pletter = false;
-            this.syntaxError('an atomic (sub)formula must use a letter in '
-                + 'the range ' + Formula.syntax.notation.predicatesRange +
-                ' and this does not');
-            return this._pletter;
-        }
-        // position should be 0, or 2 in the case of =; may need to
-        // change this to accommodate complex terms
-        this._pletter = match[0];
-        const pos = match.index;
-        if (pos != 0 && this._pletter != '=') {
-            this.syntaxError('unexpected characters appear before the ' +
-                'letter ' + this._pletter);
-        }
-        if (pos != 2 && this._pletter == '=') {
-            this.syntaxError('the identity relation symbol = occurs ' +
-                'in an unexpected place');
-        }
-        return this._pletter;
-    }
-
     // gets formula right of main operator
     get right() {
         // do not reparse
@@ -407,90 +365,26 @@ class Parse {
             return this._right;
         }
         // if no main op, return something falsy
-        if (this.opspot == -1 || Formula.syntax.symbolcat[
-            Formula.syntax.operators[this.op]] == 0) {
+        if (this.opspot == -1) {
             this._right = false;
             return this._right;
         }
         // by default we remove one character
         let skip = 1;
-        // for quantifiers one must remove the whole thing
-        if (Formula.syntax.isquant(this.op)) {
-            // determine how many characters to remove
-            let m = this.parsedstr.match(Formula.syntax.qaRegEx);
-            if (m) { skip = m[0].length; }
+        // for quantifiers one must remove two
+        if (this.op == '∀') {
+            skip = 2;
         }
         // break the string
         const rightstring =
             this.parsedstr.substring(this.opspot+skip).trim();
         // if nothing left, that's a problem
-        if (rightstring == '') {
-            this.syntaxError('nothing to the right of the operator ' +
-                this.op);
-            this._right = false;
-            return this._right;
-        }
         // get formula
-        this._right = Formula.from(rightstring);
+        this._right = new Formula(rightstring);
         return this._right;
     }
 
-    // puts all syntax errors into a single string
-    get syntaxerrors() {
-        if (!("_syntaxerrors" in this)) { return ''; }
-        let rv = '';
-        let needsep = false;
-        for (let reason in this._syntaxerrors) {
-            if (this._syntaxerrors[reason]) {
-                if (needsep) {
-                    rv += '; ';
-                }
-                rv += reason;
-                needsep = true;
-            }
-        }
-        return rv;
-    }
-
-    // gets the terms of a formula; usually important only for atomics
-    get terms() {
-        // note: nonatomics have terms which come from just stripping
-        // everything else
-        if ("_terms" in this) {
-            return this._terms;
-        }
-        // remove first (should be only) predicate in atomics
-        let nopred = this.parsedstr;
-        if (!this.op) {
-            // replace (as opposed to replaceAll, to remove first only)
-            nopred = nopred.replace(this.pletter,'').trim();
-        }
-        // remove spaces
-        nopred = nopred.replaceAll(' ','');
-        // strip outer parens, record having done so
-        const nopredstripped = Formula.syntax.stripmatching(nopred);
-        if (nopred != nopredstripped) {
-            this._termshadparens = true;
-        }
-        // strip commas
-        const nocommas = nopredstripped.replaceAll(',','');
-        if (nocommas != nopredstripped) {
-            this._termshadcommas = true;
-        }
-        // strip everything else**
-        const r = new RegExp('[^' + Formula.syntax.notation.variableRange +
-            Formula.syntax.notation.constantsRange + ']','g');
-        const termstr = nocommas.replace(r,'');
-        // atomic formulas should not have junk
-        if ((!this.op) && (nocommas != termstr)) {
-            this.syntaxError('unexpected symbols occur within an ' +
-                'atomic (sub)formula');
-        }
-        this._terms = termstr.match(Formula.syntax.termsRegEx);
-        if (!this._terms) { this._terms = []; }
-        return this._terms;
-    }
-
+    /*
     // determines if formula is well-formed
     get wellformed() { // should also bubble syntax errors to top
         if ("_wellformed" in this) {
@@ -572,7 +466,8 @@ class Parse {
         // if got here all was OK
         return this._wellformed;
     }
-
+*/
+    /*
     // OTHER METHODS
     // important: instantiate should not change original Formula ("this")
     instantiate(variable, term) {
@@ -746,6 +641,7 @@ class Parse {
         }
         return this.normal; // shouldn't be here either
     }
+    */
 }
 
 
