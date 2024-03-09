@@ -195,5 +195,8 @@ function pretty(f,ia) {
 
 pretty(fml,0);
 
-// quant = (before + after + 11) - (2*thickness)
-//
+// quant = (before + after + 8) - (2*thickness)
+// negation/conditional = (before + after)
+// judge = after + thickness
+// dont add 3, but it is there
+// don't include judgement stroke?

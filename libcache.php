@@ -67,6 +67,9 @@ function headers_from_opts($opts) {
         if (isset($opts->thickness) && ($opts->thickness != '')) {
             $hdrs .= '\setlength{\GGthickness}{' .
                 $opts->thickness . 'pt}' . PHP_EOL;
+            $quantthickness = 0.75*floatval($opts->thickness);
+            $hdrs .= '\setlength{\GGquantthickness}{' +
+                strval($quantthickness) + 'pt}' . PHP_EOL;
         }
         if (isset($opts->linewidth) && ($opts->linewidth != '')) {
             $hdrs .= '\setlength{\GGbeforelen}{' .
