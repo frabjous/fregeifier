@@ -395,28 +395,3 @@ function converttogg(f, addjudge, startline, gothics) {
     return rv;
 }
 
-/*
-const s = normalize('(Fy → y = ἀ(a=a)) → ∀x(Fx → Gx)');
-const fml = new Parse(s);
-
-console.log('opspot is ' + fml.opspot.toString());
-
-function pretty(f,ia) {
-    let gap = '';
-    while (gap.length < ia) {
-        gap += ' ';
-    }
-    if (!f.op) {
-        console.log(gap + 'remainder: ' + f.parsedstr);
-        return;
-    }
-    console.log(gap + 'op: ' + f.op);
-    if (f.left) { pretty(f.left, ia + 2); }
-    if (f.right) { pretty(f.right, ia+2); }
-}
-
-pretty(fml,0);
-
-console.log(converttogg(fml, true, true, []));
-
-*/
