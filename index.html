@@ -214,6 +214,8 @@ br.clearer {
 
 input[type="text"] {
     box-sizing: border-box;
+    padding: 3px;
+    border-radius: 5px;
     width: 100%;
 }
 
@@ -274,6 +276,24 @@ kbd {
     white-space: nowrap;
 }
 
+.symbolbtn {
+    display: inline-block;
+    width: 1.6rem;
+    height: 1.6rem;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #F0F0F0;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 0.2rem;
+    margin-right: 0.3rem;
+    margin-top: 0.3rem;
+}
+
+.symbolbtn:hover {
+    background-color: #DDDDFF;
+}
+
 </style>
 
 <script type="module">
@@ -298,6 +318,14 @@ kbd {
             e[o] = opts[o];
         }
         return e;
+    }
+
+    function insertSymbol(c) {
+        const fmlfield = document.getElementById('convertfml');
+        if (!fmlfield) { return; }
+        const pos = fmlfield.selectionStart;
+        fmlfield.setRangeText(c);
+        fmlfield.setSelectionRange(pos+1, pos+1);
     }
 
     function reportError(msg) {
@@ -439,6 +467,24 @@ kbd {
         type: 'text',
         parent: formarea
     });
+    const convbtndiv = newelem('div', {
+        id: 'convbtndiv',
+        parent: formarea
+    });
+    for (const char of ['→','¬','∀', 'ἀ', 'α', 'ἐ', 'ε', 'ἠ', 'η']) {
+        const cbtn = newelem('span', {
+            classes: ['symbolbtn'],
+            innerHTML: char,
+            myfield: convertfield,
+            mysymbol: char,
+            title: 'insert ' + char,
+            onclick: function(e) {
+                e.preventDefault();
+                insertSymbol(this.mysymbol);
+            },
+            parent: convbtndiv
+        });
+    }
     const latexcodelabel = newelem('label', {
         htmlFor: 'latexcode',
         id: 'lcodelabel',
