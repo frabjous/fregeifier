@@ -294,6 +294,24 @@ kbd {
     background-color: #DDDDFF;
 }
 
+.cbdiv {
+    display: inline-block;
+    height: 1.6rem;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+    margin-right: 1rem;
+}
+
+.cbdiv input[type="checkbox"] {
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+    transform: scale(1.5);
+}
+
+#convgobtndiv {
+    margin-bottom: 1rem;
+}
+
 </style>
 
 <script type="module">
@@ -326,6 +344,12 @@ kbd {
         const pos = fmlfield.selectionStart;
         fmlfield.setRangeText(c);
         fmlfield.setSelectionRange(pos+1, pos+1);
+    }
+
+    function keyhandler(e) {
+        if (e.key == '>') {
+            e.preventDefault();
+        }
     }
 
     function reportError(msg) {
@@ -465,6 +489,7 @@ kbd {
     const convertfield = newelem('input', {
         id: 'convertfml',
         type: 'text',
+        onkeydown: keyhandler,
         parent: formarea
     });
     const convbtndiv = newelem('div', {
@@ -478,6 +503,9 @@ kbd {
             myfield: convertfield,
             mysymbol: char,
             title: 'insert ' + char,
+            onpointerdown: function(e) {
+                e.preventDefault();
+            },
             onclick: function(e) {
                 e.preventDefault();
                 insertSymbol(this.mysymbol);
@@ -485,6 +513,46 @@ kbd {
             parent: convbtndiv
         });
     }
+    const frakdiv = newelem('div', {
+        classes: ['cbdiv'],
+        parent: convbtndiv
+    });
+    const fraklbl = newelem('label', {
+        htmlFor: 'usefraktur',
+        innerHTML: 'gothic bound variables',
+        parent: frakdiv
+    });
+    const frakcb = newelem('input', {
+        type: 'checkbox',
+        id: 'usefraktur',
+        checked: true,
+        parent: frakdiv,
+    });
+    const judgediv = newelem('div', {
+        classes: ['cbdiv'],
+        parent: convbtndiv
+    });
+    const judgelbl = newelem('label', {
+        htmlFor: 'usejudge',
+        innerHTML: 'judgment stroke',
+        parent: judgediv
+    });
+    const judgecb = newelem('input', {
+        type: 'checkbox',
+        id: 'usejudge',
+        checked: true,
+        parent: judgediv
+    });
+    const convgobtndiv = newelem('div', {
+        parent: formarea,
+        id: 'convgobtndiv'
+    });
+    const convgobutton = newelem('button', {
+        type: 'button',
+        innerHTML: 'convert to LaTeX code',
+        parent: convgobtndiv
+    });
+
     const latexcodelabel = newelem('label', {
         htmlFor: 'latexcode',
         id: 'lcodelabel',
