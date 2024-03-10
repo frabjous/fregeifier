@@ -193,8 +193,10 @@ function handleunicode(s, gothics) {
     if (gothics !== false) {
         for (const gothic of gothics) {
             const regex = new RegExp(gothic, 'g');
-            rv = rv.replace(regex, '\\mathfrak{' + gothic + '}');
+            rv = rv.replace(regex, '\\𝕱𝕶𝕬𝕶{' + gothic + '}');
         }
+        const gr = new RegExp('𝕱𝕶𝕬𝕶', 'g');
+        rv = rv.replace(gr, 'mathfrak');
     }
     rv = rv.replace(/ἀ/g, '\\spirituslenis{\\alpha}');
     rv = rv.replace(/ἐ/g, '\\spirituslenis{\\epsilon}');
