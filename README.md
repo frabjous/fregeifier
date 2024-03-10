@@ -162,7 +162,7 @@ If the repository is cloned into a directory served by a PHP-enabled web server,
 
 PHP was chosen as the programming language to make setting up the web interface easy.
 
-The interface is hopefully self-explanatory for the visitor for the purposes of creating images similar to those produced by the filter.
+The interface is hopefully self-explanatory for the visitor for the purposes of creating images similar to those produced by the filter. Additionally, images can be created through the web interface by converting from contemporary notation.
 
 The same tools necessary for the filter must be installed. Files created by the user will be stored in a data folder, either at `../../data/fregeifier` relative to the repository directory (if it exists) or `$HOME/.cache/fregeifier` otherwise. Whenever invoked, files older than a day will be removed.
 
@@ -174,7 +174,7 @@ More is planned!
 
 - [x] pandoc filter
 - [x] basic web interface
-- [ ] add widget on web interface for converting ordinary notation to the LaTeX code for Frege’s
+- [x] add widget on web interface for converting ordinary notation to the LaTeX code for Frege’s
 - [ ] create javascript and javascript api for loading Fregeified images in a manner similar to that of KaTeX or MathJax.
 
 ## Acknowledgements

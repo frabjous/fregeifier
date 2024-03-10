@@ -147,10 +147,6 @@ table td {
     font-size: 90%;
 }
 
-.note {
-    font-size: 0.8rem;
-}
-
 @media screen {
 
     footer,
@@ -310,6 +306,9 @@ kbd {
 
 #convgobtndiv {
     margin-bottom: 1rem;
+}
+#convgobtndiv button {
+    margin-right: 0.5rem;
 }
 
 </style>
@@ -585,6 +584,16 @@ kbd {
         onclick: fillinconvert,
         parent: convgobtndiv
     });
+    const conccreatebutton = newelem('button', {
+        type: 'button',
+        innerHTML: 'create image',
+        onclick: function(e) {
+            fillinconvert(e);
+            document.getElementById("proc"+"essbu"+"tton").scrollIntoView();
+            sendRequest();
+        },
+        parent: convgobtndiv
+    });
 
     const latexcodelabel = newelem('label', {
         htmlFor: 'latexcode',
@@ -804,12 +813,12 @@ kbd {
                 <h2>Fregeifier Web Interface</h2>
                 <p>This interface can be used to leverage the power of exiting tools for complex or unusual mathematics found in LaTeX, and make use of them in other kinds of documents, such as web pages (html), word processor documents (MS Word’s docx, LibreOffice’s odt, etc.)</p>
                 <p>A great case in point is the logical notation of Gottlob Frege, which is very hard to do in non-LaTeX based documents. The Amazing Fregeifier to the rescue!</p>
-                <p>Feel free to use the form below to convert a formula in <!-- modern notation or -->LaTeX code into an image you can embed in your documents.</p>
+                <p>Feel free to use the form below to convert a formula in modern notation or LaTeX code into an image you can embed in your documents.</p>
                 <p>If you choose a vector format, the image will be infinitely scaleable and should still look good when scaled to any size.</p>
                 <p>By default, the <a href="https://ctan.org/pkg/grundgesetze">grundgesetze</a> and <a href="https://ctan.org/pkg/fge">fge</a> (along with standard AMS math packages) packages are loaded; see <a href="#commands">below</a> for their commands.</p>
                 <h3>Create a Fregeified Image</h3>
                 <p>If your formula is relative complex, it is best to fill in the LaTeX commands directly <a href="#lcodelabel">below</a>.</p>
-                <p>If your formula is relatively simple, you can create the LaTeX commands by converting from a formula in modern notation using → for a conditional (type: <kbd>-&gt;</kbd>), ¬ (type: <kbd>~</kbd>) for negation, and ∀ (type: <kbd>A</kbd>) for quantifiers.</p>
+                <p>If your formula is relatively simple, you can create the LaTeX commands by converting from a formula in modern notation using → for a conditional (type: <kbd>-&gt;</kbd>), ¬ (type: <kbd>~</kbd>) for negation, and ∀ (type: <kbd>A</kbd>) for quantifiers. Click “create image” <a href="#processbutton">below</a> afterwards.</p>
                 <div id="formarea"></div>
                 <div id="outputarea"></div>
                 <h3 id="commands">Commands</h3>
