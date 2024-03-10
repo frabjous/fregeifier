@@ -36,7 +36,7 @@ function stripquantparens(s) {
     return s.replace(/\((∀[a-zA-Z])\)/g, "$1");
 }
 
-export function normalize(s) {
+function normalize(s) {
     return stripmatching(
         stripquantparens(
             allsoftparens(
@@ -46,7 +46,7 @@ export function normalize(s) {
     )
 }
 
-export class Parse {
+class Parse {
     // start by recording what string got parsed
     constructor(s) {
         // input string is what were given, except with soft
@@ -238,7 +238,12 @@ function formulawidth(f, addjudge) {
         ((addjudge) ? (beforeafter + thickness) : 0);
 }
 
-export function converttogg(f, addjudge, startline, gothics) {
+export function convertstr(s, addjudge, usegothics) {
+    const f = new Parse(normalize(s));
+    return converttogg(f, addjudge, true, ((usegothics) ? [] : false));
+}
+
+function converttogg(f, addjudge, startline, gothics) {
     let rv ='';
     let oppl = -1;
     if (!f.op) {

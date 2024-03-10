@@ -318,6 +318,7 @@ kbd {
 // LICENSE: GNU GPL v3 You should have received a copy of the GNU General
 // Public License along with this program. If not, see
 // https://www.gnu.org/licenses/.
+    import { convertstr } from './convert.mjs';
 
     function newelem(tt, opts = {}) {
         const e = document.createElement(tt);
@@ -347,9 +348,30 @@ kbd {
     }
 
     function keyhandler(e) {
-        if (e.key == '>') {
+        let before = this?.value?.substr(0, this.selectionStart) ?? '';
+        let after = this?.value?.substr(this.selectionStart);
+        if ((e.key == '>') && (/-$/.test(before))) {
             e.preventDefault();
+            const newbefore = before.replace(/-*$/g,'');
+            this.value = newbefore + '→' + after;
+            this.setSelectionRange((newbefore.length + 1), (newbefore.length + 1));
         }
+        if (e.key == '~') {
+            e.preventDefault();
+            this.value = before + '¬' + after;
+            this.setSelectionRange((before.length + 1), (before.length + 1));
+        }
+        if (e.key == '⊃') {
+            e.preventDefault();
+            this.value = before + '→' + after;
+            this.setSelectionRange((before.length + 1), (before.length + 1));
+        }
+        if (e.key == 'A') {
+            e.preventDefault();
+            this.value = before + '∀' + after;
+            this.setSelectionRange((before.length + 1), (before.length + 1));
+        }
+
     }
 
     function reportError(msg) {
@@ -496,7 +518,7 @@ kbd {
         id: 'convbtndiv',
         parent: formarea
     });
-    for (const char of ['→','¬','∀', 'ἀ', 'α', 'ἐ', 'ε', 'ἠ', 'η']) {
+    for (const char of ['→','¬','∀', '=', 'ἀ', 'α', 'ἐ', 'ε', 'ἠ', 'η']) {
         const cbtn = newelem('span', {
             classes: ['symbolbtn'],
             innerHTML: char,
@@ -550,6 +572,14 @@ kbd {
     const convgobutton = newelem('button', {
         type: 'button',
         innerHTML: 'convert to LaTeX code',
+        onclick: function(e) {
+            const usegothic = document.getElementById("usefraktur").checked;
+            const usejudge = document.getElementById("usejudge").checked;
+            const str = document.getElementById("convertfml").value;
+            const ta = document.getElementById("latexcode");
+            if (!ta) { return; }
+            ta.value = convertstr(str, usejudge, usegothic).trim();
+        },
         parent: convgobtndiv
     });
 
