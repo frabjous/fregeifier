@@ -51,9 +51,15 @@ $record = get_record();
 $comperrors = '';
 
 // apply changes to document
+
+error_log(json_encode($obj->blocks, JSON_PRETTY_PRINT));
+
 if (isset($obj->blocks)) {
     $obj->blocks = fregeify_ast($obj->blocks, false);
 }
+
+error_log(json_encode($obj->blocks, JSON_PRETTY_PRINT));
+
 
 // output new ast json encoded
 echo json_encode($obj, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
