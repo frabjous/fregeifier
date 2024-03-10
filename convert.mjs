@@ -4,6 +4,10 @@
 
 const operators = ['→','¬','∀','=','ἀ','ἐ','ἠ','ὠ'];
 
+function isletter(c) {
+    return (/[A-Za-z]/.test(c));
+}
+
 // changes all soft parentheses
 function allsoftparens(s) {
     return s.replace(/[\{\[]/g,'(').replace(/[}\]]/g,')');
@@ -65,7 +69,7 @@ class Parse {
             return this._boundvar;
         }
         if ((this.op == '∀') &&
-            (/[A-Za-z]/.test(this.parsedstr.at(this.opspot + 1)))) {
+            (isletter(this.parsedstr.at(this.opspot + 1)))) {
             this._boundvar = this.parsedstr.at(this.opspot + 1);
             return this._boundvar;
 
@@ -146,7 +150,8 @@ class Parse {
                 // decrease depth with right parenthesis
                 currdepth--;
             }
-            const isop = (operators.indexOf(c) >= 0);
+            const isop = ((operators.indexOf(c) >= 0) ||
+                (isletter(c) && (this.parsedstr.at(i+1) == '(')));
             // found something at this spot
             if ((isop) &&
                 ((currdepth < mainopdepth) ||
@@ -211,7 +216,7 @@ function handleunicode(s, gothics) {
 
 function portionwidth(f, beforeafter, thickness) {
     // only ∀, ¬, → add to width
-    if ((!f.op) || (operators.indexOf(f.op) >= 3)) {
+    if ((!f.op) || (isletter(f.op)) || (operators.indexOf(f.op) >= 3)) {
         return 0;
     }
     const lwidth = ((f.left) ?
@@ -243,6 +248,7 @@ function formulawidth(f, addjudge) {
 export function convertstr(s, addjudge, usegothics) {
     const f = new Parse(normalize(s));
     const res = converttogg(f, addjudge, true, ((usegothics) ? [] : false));
+    // remove unneeded spaces
     return res.replace(/([{}\(\)]) /g, "$1").replace(/ \\/g,'\\');
 }
 
@@ -252,6 +258,23 @@ function converttogg(f, addjudge, startline, gothics) {
     if (!f.op) {
         if (addjudge) { rv += '\\GGjudge'; }
         rv += ' ' + handleunicode(f.parsedstr, gothics);
+        if (startline === false) {
+            rv = '\\GGterm{' + rv + '}';
+        }
+        return rv;
+    }
+    if (isletter(f.op)) {
+        if (addjudge) { rv += '\\GGjudge'; }
+        if ((f.left) && (f.left.parsedstr != '')) {
+            rv += converttogg(f.left, false, true, gothics);
+        }
+        rv += ' ' + handleunicode(f.op, gothics);
+        if ((f.right) && (f.right.parsedstr != '')) {
+            // always add parentheses?
+            rv += (f.right.hasconditional) ? '\\GGbracket{' : '(';
+            rv += converttogg(f.right, false, true, gothics);
+            rv += (f.right.hasconditional) ? '}' : ')';
+        }
         if (startline === false) {
             rv = '\\GGterm{' + rv + '}';
         }
