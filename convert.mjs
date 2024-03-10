@@ -64,9 +64,9 @@ class Parse {
         if ("_boundvar" in this) {
             return this._boundvar;
         }
-        if ((this.op == '∀') && (this.opspot == 0) && 
-            (/[A-Za-z]/.test(this.parsedstr.at(1)))) {
-            this._boundvar = this.parsedstr.at(1);
+        if ((this.op == '∀') &&
+            (/[A-Za-z]/.test(this.parsedstr.at(this.opspot + 1)))) {
+            this._boundvar = this.parsedstr.at(this.opspot + 1);
             return this._boundvar;
 
         }
@@ -242,7 +242,8 @@ function formulawidth(f, addjudge) {
 
 export function convertstr(s, addjudge, usegothics) {
     const f = new Parse(normalize(s));
-    return converttogg(f, addjudge, true, ((usegothics) ? [] : false));
+    const res = converttogg(f, addjudge, true, ((usegothics) ? [] : false));
+    return res.replace(/([{}\(\)]) /g, "$1").replace(/ \\/g,'\\');
 }
 
 function converttogg(f, addjudge, startline, gothics) {
