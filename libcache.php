@@ -31,9 +31,11 @@ function headers_from_opts($opts) {
             '\usepackage[bigdelims,vvarbb]{newtxmath}' . PHP_EOL .
             '\usepackage[cal=boondoxo]{mathalfa}' . PHP_EOL,
         "computermodern" => '',
-        "fira"=>'\usepackage[sfdefault,lining]{FiraSans}' . PHP_EOL .
+        "fira"=>'\let\oldmathfrak=\mathfrak' . PHP_EOL .
+            '\usepackage[sfdefault,lining]{FiraSans}' . PHP_EOL .
             '\usepackage[fakebold]{firamath-otf}' . PHP_EOL .
-            '% xelatex' . PHP_EOL,
+            '% xelatex' . PHP_EOL .
+            '\renewcommand{\mathfrak}[1]{\oldmathfrak}{#1}' . PHP_EOL,
         "garamond"=> '\usepackage[cmintegrals,cmbraces]{newtxmath}' . PHP_EOL .
             '\usepackage{ebgaramond-maths}' . PHP_EOL,
         "libertinus"=>'\usepackage{libertinus}' . PHP_EOL .
