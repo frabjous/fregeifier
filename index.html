@@ -440,6 +440,8 @@ kbd {
         let respObj = {};
         let errMsg = '';
         let error = false;
+        outputarea.classList.remove('shown');
+        outputarea.classList.add('hidden');
         try {
             const response = await fetch('request.php', {
                 method: "POST",
