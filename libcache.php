@@ -29,7 +29,8 @@ function headers_from_opts($opts) {
     $fontopts = array(
         "baskerville" => '\usepackage[lf]{Baskervaldx}' .PHP_EOL .
             '\usepackage[bigdelims,vvarbb]{newtxmath}' . PHP_EOL .
-            '\usepackage[cal=boondoxo]{mathalfa}' . PHP_EOL,
+            '\usepackage[cal=boondoxo]{mathalfa}' . PHP_EOL .
+            '\usepackage[italic]{mathastext}',
         "computermodern" => '',
         "fira"=>'\let\oldmathfrak=\mathfrak' . PHP_EOL .
             '\usepackage[sfdefault,lining]{FiraSans}' . PHP_EOL .
@@ -112,7 +113,7 @@ function purge_old_temporary_files($dir, $time) {
 }
 
 function random_string($n = 12) {
-    $pickfrom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' . 
+    $pickfrom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' .
         'abcdefghijklmnopqrstuvwxyz0123456789';
     $rv = '';
     while (strlen($rv) < $n) {
