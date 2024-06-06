@@ -58,7 +58,7 @@ if (isset($obj->blocks)) {
     $obj->blocks = fregeify_ast($obj->blocks, false);
 }
 
-error_log(json_encode($obj->blocks, JSON_PRETTY_PRINT));
+//error_log(json_encode($obj->blocks, JSON_PRETTY_PRINT));
 
 
 // output new ast json encoded
