@@ -52,7 +52,7 @@ $comperrors = '';
 
 // apply changes to document
 
-error_log(json_encode($obj->blocks, JSON_PRETTY_PRINT));
+//error_log(json_encode($obj->blocks, JSON_PRETTY_PRINT));
 
 if (isset($obj->blocks)) {
     $obj->blocks = fregeify_ast($obj->blocks, false);
