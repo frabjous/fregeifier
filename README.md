@@ -1,9 +1,13 @@
 
 # The Amazing Fregeifier
 
+## Branch Note
+
+The Fregeifier git repo has two branches, one using php for the backend code and filter, and another using server-side (NodeJS) javascript. The former is the 'php' branch and the latter is the 'main' branch. You are viewing the documentation for the **php** branch. Checkout the main branch if you would prefer the javascript version.
+
 ## Introduction
 
-The Fregeifier is a collection of tools for rendering unusual mathematics in documents and webpages, including things such Gottlob Frege’s logical notation or that of Russell and Whitehead’s *Principia Mathematica*. It is not limited to those, but may be used for any other kind of complex or unusual mathematical symbolism/notation for which LaTeX tools already exist, but are otherwise hard to use outside of LaTeX-produced documents.
+The Fregeifier is a collection of tools for rendering unusual mathematics in documents and webpages, including things such Gottlob Frege’s logical notation or that of Russell and Whitehead’s *Principia Mathematica*. It is not limited to those, and may be used for any other kind of complex or unusual mathematical symbolism/notation for which LaTeX tools already exist, but are otherwise hard to use outside of LaTeX-produced documents.
 
 Possibly more will come, but currently there are two main tools.
 
@@ -11,7 +15,7 @@ Possibly more will come, but currently there are two main tools.
 
     The filter was originally developed for [The Journal for the History of Analytical Philosophy](https://jhaponline.org) and integrates easily with the [Open Guide Typesetting Framework](https://github.com/frabjous/open-guide-typesetting-framework) and [Open Guide Editor](https://github.com/frabjous/open-guide-editor) it uses, which I also created, though it may be used independently.
 
-2) A web interface that can be used to create, preview and download (scalable) images stemming from arbitrary LaTeX code, including that which makes use of unusual packages such as the [grungesetze](https://ctan.org/pkg/grundgesetze?lang=en) or [fge](https://ctan.org/pkg/fge) packages for Frege’s notation, the [principia](https://ctan.org/pkg/principia?lang=en) package for Russell and Whitehead’s, or any other LaTeX packages available in TeXlive.
+2) A web interface that can be used to create, preview and download (scalable) images stemming from arbitrary LaTeX code, including that which makes use of unusual packages such as the [grungesetze](https://ctan.org/pkg/grundgesetze) or [fge](https://ctan.org/pkg/fge) packages for Frege’s notation, the [principia](https://ctan.org/pkg/principia) package for Russell and Whitehead’s, or any other LaTeX packages available in TeXlive.
 
     A live, hopefully working, version of the web interface can be found here: [https://russellguide.org/fregeifier](https://russellguide.org/fregeifier).
 
@@ -19,18 +23,18 @@ Possibly more will come, but currently there are two main tools.
 
 The Fregeifier has only been tested on linux, but may work on other unix-like environments.
 
-The Fregeifier requires [php](https://www.php.net/), a TeX distribution such as [texlive](https://tug.org/texlive/), the [mutool](https://www.mankier.com/1/mutool) program from the MuPDF project, and of course [pandoc](https://pandoc.org) to use the pandoc filter.
+The php branch of Fregeifier requires [php](https://www.php.net/), a TeX distribution such as [texlive](https://tug.org/texlive/), the [mutool](https://www.mankier.com/1/mutool) program from the MuPDF project, and of course [pandoc](https://pandoc.org) to use the pandoc filter.
 
-To self-host the web interface, a PHP-enabled web server (apache, nginx, caddy, etc.) must be available.
+To self-host the php branch web interface, a PHP-enabled web server (apache, nginx, caddy, etc.) must be available.
 
 ## Installation
 
-Clone this repository to a directory of your choosing (here `/path/to/repos`):
+Clone the php branch of this repository to a directory of your choosing (here `/path/to/repos`):
 
 ```sh
 cd /path/to/repos
-git clone --depth 1 https://github.com/frabjous/fregeifier
-````
+git clone --branch php --depth 1 https://github.com/frabjous/fregeifier
+```
 
 If you want to self-host the web interface, it would be best to clone the repository into a directory to be served by the php-enabled server.
 
@@ -65,7 +69,7 @@ pandoc --filter /path/to/repos/fregeifier/fregeifier_pandoc_filter.php \
     --default-image-extension=png mydocument.md -o mydocument.html
 ```
 
-Currently only `svg` and `png` are supported, but this may change.
+Currently only `svg` and `png` are supported.
 
 For the filter to have any effect when applied to a markdown input document, parts of the document containing either inline or block/display mathematics must be given the `.fregeify` css class, e.g.:
 
@@ -84,7 +88,7 @@ $$
 
 These math environments will be processed by LaTeX, converted to small images, and inserted into the document at the specified places.  Mathematics environments not so marked with the `.fregeify` class should be unaffected.
 
-Most likely, however, you don’t need to use this on boring math like “5 + 7 = 12” which can easily be rendered as regular text. The main use of the filter is to be able to call upon commands from unusual LaTeX packages. The filter will look for pandoc-compliant (yaml) metadata in the document containing code to include additional LaTeX packages in the header, which typically takes the following form:
+Most likely, however, you don’t need to use this on boring math like “5 + 7 = 12” which can easily be rendered as regular text. The main use of the filter is to handle commands from unusual LaTeX packages. The filter will look for pandoc-compliant (yaml) metadata in the document containing code to include additional LaTeX packages in the header, which typically takes the following form:
 
 ```markdown
 ---
@@ -95,7 +99,7 @@ header-includes: |
 
 These packages will be available then not just if the markdown document is processed to PDF by a LaTeX engine, but also when the filter creates the small images.
 
-So a small complete document might look like this:
+A small complete document might look like this:
 
 ```markdown
 ---
@@ -110,6 +114,7 @@ In Frege’s notation, a conditional is written as so:
 :::
 
 ```
+
 Here the [LaTeX grundgesetze package](https://ctan.org/pkg/grundgesetze?lang=en) is used to render Frege’s notation. Again, however, the filter is package-agnostic and may be used with any LaTeX packages, not just those for Frege’s notation.
 
 A custom template can be used to always load certain packages for a local installation. See [below](#custom-templates).
@@ -158,9 +163,7 @@ Moreover, if “`xelatex`” or “`lualatex`” are found in the code (most lik
 
 ## Using the web interface
 
-If the repository is cloned into a directory served by a PHP-enabled web server, the web interface should be accessible through the url for the repository directory, e.g., `http(s)://yourdomain.net/fregeifier/`.
-
-PHP was chosen as the programming language to make setting up the web interface easy.
+If the php branch of this repository is cloned into a directory served by a PHP-enabled web server, the web interface should be accessible through the url for the repository directory, e.g., `http(s)://yourdomain.net/fregeifier/`.
 
 The interface is hopefully self-explanatory for the visitor for the purposes of creating images similar to those produced by the filter. Additionally, images can be created through the web interface by converting from contemporary notation.
 
@@ -184,4 +187,3 @@ Thanks go to the creators of tools such as the grundgesetze, fge and principia L
 ## License
 
 Copyright 2024 © [Kevin C. Klement](https://people.umass.edu/klement). This is free software, which can be redistributed and/or modified under the terms of the [GNU General Public License (GPL), version 3](https://www.gnu.org/licenses/gpl.html).
-
