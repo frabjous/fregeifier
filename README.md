@@ -25,7 +25,7 @@ The Fregeifier has only been tested on linux, but may work on other unix-like en
 
 The Fregeifier (main branch version) requires [node](https://nodejs.org) or compatible javascript runtime, a package manager for it such as [npm](https://www.npmjs.com/), a TeX distribution such as [texlive](https://tug.org/texlive/), the [mutool](https://www.mankier.com/1/mutool) program from the MuPDF project, and of course [pandoc](https://pandoc.org) to use the pandoc filter.
 
-To self-host the web interface, the repo contains a router for an [ExpressJS](https://expressjs.com) based server app. For more information on using the router, see [below](#using-the-interface).
+To self-host the web interface, the repo contains a router for an [ExpressJS](https://expressjs.com) based server app. For more information on using the router, see [below](#using-the-web-interface-with-the-testing-server).
 
 ## Installation
 
