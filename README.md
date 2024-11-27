@@ -196,7 +196,7 @@ FREGEIFIERTESTSERVERPORT=8080 npm run production
 
 The interface is hopefully self-explanatory for the purposes of creating images similar to those produced by the filter. Additionally, images can be created through the web interface by converting from contemporary notation.
 
-Files created by the user will be stored in a data folder, either at `$HOME/data/fregeifier` (if it exists) or `$HOME/.cache/fregeifier` otherwise. When invoked, files older than a week stored there are removed, but presumably the user will have downloaded copies from the web page before that if they wished to make use of them.
+Files created by the user will be stored in a data directory, either at `$HOME/data/fregeifier` (if it exists) or `$HOME/.cache/fregeifier` otherwise. When invoked, files older than a week stored there are removed, but presumably the user will have downloaded copies from the web page before that if they wished to make use of them.
 
 ## Adding the web interface to a different ExpressJS app
 
