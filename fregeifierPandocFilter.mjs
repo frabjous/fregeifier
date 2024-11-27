@@ -8,8 +8,42 @@
 // the executable that can be used with: 
 // pandoc --filter /path/to/fregeifier/fregeifierPandocFilter
 
-//
+import {fregeifyAST, getExtraHeaders} from './js/libast.mjs';
+import {getRecord, getTemplate} from './js/libfregeify.mjs';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+
+// get script directory
+const __fregeifierfilename = fileURLToPath(import.meta.url);
+const __fregeifierdirname = path.dirname(__fregeifierfilename);
+process.__fregeifierdirname = __fregeifierdirname;
+
 function fregeifierFilter(ast) {
+  let readerOpts = {};
+  const readerOptsJSON = process?.env?.PANDOC_READER_OPTIONS;
+  if (readerOptsJSON && readerOptsJSON != '') {
+    try {
+      readerOpts = JSON.parse(readerOptsJSON);
+    } catch(err) {
+      readerOpts = {};
+    }
+  }
+  const jobOpts = {};
+  const defImgExt = readerOpts?.["default-image-extension"];
+  jobOpts.imageext = (defImgExt && defImgExt != '') ? defImgExt : 'svg';
+  if (ast?.meta?.['header-includes']) {
+    jobOpts.extraheaders = getExtraHeaders(ast.meta['header-includes'], '');
+  }
+  jobOpts.jobdir = process.cwd();
+  jobOpts.template = getTemplate(jobOpts.jobdir);
+  if (!jobOpts.template) {
+    console.error('Cannot find Fregeifier template.');
+    process.exit(1);
+  }
+  jobOpts.record = getRecord(jobOpts.jobdir);
+  if (ast?.blocks) {
+      ast.blocks = fregeifyAST(jobOpts, ast.blocks, false);
+  }
   return ast;
 }
 

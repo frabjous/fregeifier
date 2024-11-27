@@ -8,7 +8,7 @@
 
 import {getImageFile} from './libfregeify.mjs';
 
-export function fregeifyAST(ast, active) {
+export function fregeifyAST(jobOpts, ast, active) {
   if ((typeof ast == 'object') && !Array.isArray(ast)) {
     // check if need to Fregeify this obkect
     if (active && ("t" in ast) && ast.t == "Math") {
@@ -24,7 +24,7 @@ export function fregeifyAST(ast, active) {
         c[0].t.includes('Inline'))
         ? 'inline' : 'display';
       const mathText = c[1];
-      const imageFile = getImageFile(mathText, displayinline);
+      const imageFile = getImageFile(jobOpts, mathText, displayinline);
       const imgObj = {
         t: 'Image',
         c: [
@@ -48,7 +48,7 @@ export function fregeifyAST(ast, active) {
     }
     // otherwise recurse
     if ("c" in ast) {
-      ast.c = fregeifyAST(ast.c, active)
+      ast.c = fregeifyAST(jobOpts, ast.c, active)
     }
     return ast;
   }
@@ -60,13 +60,14 @@ export function fregeifyAST(ast, active) {
       for (const cl of classes) {
         if (typeof cl != 'string') continue;
         if (cl.includes('fregeify') || cl.includes('fregify')) {
-          active=true;
+          active = true;
+          break;
         }
       }
     }
     // replace array elements
     for (let i = 0; i < ast.length; i++) {
-      ast[i] = fregeifyAST(ast[i], active);
+      ast[i] = fregeifyAST(jobOpts, ast[i], active);
     }
   }
   // non-arrays, non-objects stay as is
@@ -77,12 +78,12 @@ export function getExtraHeaders(ast, extraheader) {
   if (Array.isArray(ast)) {
     // if a tex-inclusion, add it
     if (ast?.[0] == 'tex' && (typeof ast?.[1] == 'string')) {
-      extraheader += (extraheader == '') ? '' + '\n';
+      extraheader += (extraheader == '') ? '' : '\n';
       return (extraheader + ast[1]);
     }
     // for other arrays, recurse
     for (const subast of ast) {
-      subextraheader = getExtraHeaders(subast, '');
+      const subextraheader = getExtraHeaders(subast, '');
       if (extraheader != '' && subextraheader != '') {
         extraheader += '\n';
       }
