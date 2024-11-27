@@ -2,9 +2,8 @@
 // Public License along with this program. If not, see
 // https://www.gnu.org/licenses/.
 
-////////////// libast.mjs ///////////////////////////////////
-// Functions for modifying/reading pandoc ASTs             //
-/////////////////////////////////////////////////////////////
+// File: libast.mjs
+// Functions for modifying/reading pandoc Abstract Syntax Trees (ast)
 
 import {getImageFile} from './libfregeify.mjs';
 

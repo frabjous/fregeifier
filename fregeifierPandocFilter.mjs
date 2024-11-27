@@ -6,7 +6,7 @@
 
 // File: fregeifierPandocFilter.mjs
 // the executable that can be used with: 
-// pandoc --filter /path/to/fregeifier/fregeifierPandocFilter
+// pandoc --filter /path/to/fregeifier/fregeifierPandocFilter.mjs
 
 import {fregeifyAST, getExtraHeaders} from './js/libast.mjs';
 import {getRecord, getTemplate} from './js/libfregeify.mjs';

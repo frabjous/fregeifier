@@ -2,9 +2,8 @@
 // Public License along with this program. If not, see
 // https://www.gnu.org/licenses/.
 
-//////////////////////// libcache.mjs //////////////////////////////////
-// Common functions involving cached fregeifier files on server       //
-////////////////////////////////////////////////////////////////////////
+// File: libcache.mjs
+// Functions involving cached fregeifier files on server
 
 import path from 'node:path';
 import fs from './fs.mjs';
@@ -86,7 +85,7 @@ export function headersFromOpts(opts) {
 }
 
 export function newkey() {
-  purgeOldTemporaryFiles(`${datadir}/temporary`);
+  purgeOldTemporaryFiles(`${datadir}/temporary`, Date.now() - 604800000);
   let rv = '';
   do {
     rv = randomString(12);
@@ -107,12 +106,3 @@ function purgeOldTemporaryFiles(dir, time) {
     fs.rmdirSync(subdir, {});
   }
 }
-
-// setup and cleanup
-/*
-$datadir = determine_datadir();
-if ($datadir === false) {
-    rage_quit('Cannot find or create data folder.');
-}
-purge_old_temporary_files("$datadir/temporary", (time()- 86400));
-*/

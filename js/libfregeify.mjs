@@ -2,9 +2,8 @@
 // Public License along with this program. If not, see
 // https://www.gnu.org/licenses/.
 
-////////////// libfregeify.mjs /////////////////////////////
-// Common functions for image creation and discovery      //
-////////////////////////////////////////////////////////////
+// File: libfregeify.mjs
+// Common functions for image creation and discovery
 
 import fs from './fs.mjs';
 import path from 'node:path';

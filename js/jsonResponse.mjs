@@ -2,9 +2,9 @@
 // Public License along with this program. If not, see
 // https://www.gnu.org/licenses/.
 
-////////////// jsonResponse.mjs /////////////////////////////
-// responds to requests from web interface to create image //
-/////////////////////////////////////////////////////////////
+// File: jsonResponse.mjs
+// responds to requests from web interface to create an image
+
 
 import {headersFromOpts, newkey} from './libcache.mjs';
 import {getImageFile, getRecord, getTemplate} from './libfregeify.mjs';

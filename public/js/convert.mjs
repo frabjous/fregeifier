@@ -398,4 +398,3 @@ function converttogg(f, addjudge, startline, gothics) {
   }
   return rv;
 }
-
