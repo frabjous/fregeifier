@@ -125,7 +125,7 @@ The `recommended.css` file is a stylesheet with settings recommended for use wit
 
 ## How it works
 
-The LaTeX math code extracted from the environment by pandoc is processed by the filter to create a minimal LaTeX document. That document is then processed by LaTeX into PDF, the PDF is cropped by the `pdfcrop` utility of TeXlive, and then `mutool` is used to convert the PDF page to the output format. The images will be placed in an `images` subfolder of the active directory. It is usually best to run pandoc from the same directory as your source document.
+The LaTeX math code extracted from the environment by pandoc is processed by the filter to create a minimal LaTeX document. That document is then processed by LaTeX into PDF, the PDF is cropped by the `pdfcrop` utility of TeXlive, and then `mutool` is used to convert the PDF page to the output format. The images will be placed in an `images` subdirectory of the active directory. It is usually best to run pandoc from the same directory as your source document.
 
 ## Custom templates
 
@@ -167,7 +167,7 @@ If the php branch of this repository is cloned into a directory served by a PHP-
 
 The interface is hopefully self-explanatory for the visitor for the purposes of creating images similar to those produced by the filter. Additionally, images can be created through the web interface by converting from contemporary notation.
 
-The same tools necessary for the filter must be installed. Files created by the user will be stored in a data folder, either at `../../data/fregeifier` relative to the repository directory (if it exists) or `$HOME/.cache/fregeifier` otherwise. Whenever invoked, files older than a day will be removed.
+The same tools necessary for the filter must be installed. Files created by the user will be stored in a data directory, either at `../../data/fregeifier` relative to the repository directory (if it exists) or `$HOME/.cache/fregeifier` otherwise. Whenever invoked, files older than a day will be removed.
 
 The interface allows the user to create documents with arbitrary LaTeX code, so security may be a concern. `--shell-escape` and `--write18` are disabled and the number of characters in the LaTeX code is limited, but you may wish to take other measures, especially if the server is exposed to the full internet.
 

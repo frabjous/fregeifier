@@ -83,10 +83,10 @@ if (strlen($opts->latexcode) > 3000){
 $template = get_template();
 $tempkey = newkey();
 $oldpwd = getcwd();
-// operate in the temporary folder
+// operate in the temporary directory
 if (!is_dir("$datadir/temporary/$tempkey")) {
     if (!mkdir("$datadir/temporary/$tempkey", 0755, true)) {
-        rage_quit("Could not create temporary folder.");
+        rage_quit("Could not create temporary directory.");
     }
 }
 chdir("$datadir/temporary/$tempkey");

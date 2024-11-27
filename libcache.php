@@ -125,7 +125,7 @@ function random_string($n = 12) {
 // setup and cleanup
 $datadir = determine_datadir();
 if ($datadir === false) {
-    rage_quit('Cannot find or create data folder.');
+    rage_quit('Cannot find or create data directory.');
 }
 purge_old_temporary_files("$datadir/temporary", (time()- 86400));
 
