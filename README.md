@@ -157,7 +157,7 @@ When processing "fregeified" math, the former will be replaced by any TeX-specif
 
 Templates are fussy. There must be exactly one space between the “`%`” and the “`F`”.
 
-The file `default-template.tex` can be consulted for comparison, and/or directly copied and modified to suits one’s needs (e.g., specify different math fonts, always load certain packages, etc.)
+The file `default-template.tex` can be consulted for comparison, and/or directly copied and modified to suit one’s needs (e.g., specify different math fonts, always load certain packages, etc.)
 
 Moreover, if “`xelatex`” or “`lualatex`” are found in the code (most likely in another comment), they will be used in place of `pdflatex` to create the converted images.
 
@@ -170,15 +170,6 @@ The interface is hopefully self-explanatory for the visitor for the purposes of 
 The same tools necessary for the filter must be installed. Files created by the user will be stored in a data folder, either at `../../data/fregeifier` relative to the repository directory (if it exists) or `$HOME/.cache/fregeifier` otherwise. Whenever invoked, files older than a day will be removed.
 
 The interface allows the user to create documents with arbitrary LaTeX code, so security may be a concern. `--shell-escape` and `--write18` are disabled and the number of characters in the LaTeX code is limited, but you may wish to take other measures, especially if the server is exposed to the full internet.
-
-## Roadmap and TODO
-
-More is planned!
-
-- [x] pandoc filter
-- [x] basic web interface
-- [x] add widget on web interface for converting ordinary notation to the LaTeX code for Frege’s
-- [ ] create javascript and javascript api for loading Fregeified images in a manner similar to that of KaTeX or MathJax.
 
 ## Acknowledgements
 
