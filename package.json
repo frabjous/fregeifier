@@ -4,11 +4,12 @@
   "description": "Tools to facilitate use of complex mathematics such as Frege notation in markdown or other document formats",
   "main": "test-server.mjs",
   "scripts": {
-    "test": "nodemon test-server.mjs"
+    "test": "nodemon test-server.mjs",
+    "production": "node test-server.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.cim/frabjous/fregeifier"
+    "url": "https://github.com/frabjous/fregeifier"
   },
   "keywords": [
     "LaTeX",
