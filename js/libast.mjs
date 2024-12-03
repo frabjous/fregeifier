@@ -56,11 +56,13 @@ export function fregeifyAST(jobOpts, ast, active) {
     // make it active
     if (ast.length > 0 && Array.isArray(ast[0]) && ast[0].length > 1) {
       const classes = ast[0][1];
-      for (const cl of classes) {
-        if (typeof cl != 'string') continue;
-        if (cl.includes('fregeify') || cl.includes('fregify')) {
-          active = true;
-          break;
+      if (Array.isArray(classes)) {
+        for (const cl of classes) {
+          if (typeof cl != 'string') continue;
+          if (cl.includes('fregeify') || cl.includes('fregify')) {
+            active = true;
+            break;
+          }
         }
       }
     }
