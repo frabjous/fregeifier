@@ -1,0 +1,31 @@
+{
+  "name": "fregeifier",
+  "version": "0.2.0",
+  "description": "Tools to facilitate use of complex mathematics such as Frege notation in markdown or other document formats",
+  "main": "test-server.mjs",
+  "scripts": {
+    "test": "nodemon test-server.mjs",
+    "production": "node test-server.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frabjous/fregeifier"
+  },
+  "keywords": [
+    "LaTeX",
+    "markdown",
+    "mathematics",
+    "logic",
+    "symbols",
+    "convert",
+    "images",
+    "Frege",
+    "Begriffsschrift",
+    "Grundgesetze"
+  ],
+  "author": "Kevin C. Klement",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
