@@ -77,7 +77,7 @@ export function getExtraHeaders(ast, extraheader) {
   if (Array.isArray(ast)) {
     // if a tex-inclusion, add it
     if (ast?.[0] == 'tex' && (typeof ast?.[1] == 'string')) {
-      extraheader += (extraheader == '') ? '' + '\n';
+      extraheader += (extraheader == '') ? '' : '\n';
       return (extraheader + ast[1]);
     }
     // for other arrays, recurse
