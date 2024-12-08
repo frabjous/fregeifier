@@ -103,6 +103,10 @@ function purgeOldTemporaryFiles(dir, time) {
   const subdirs = fs.subdirs(dir);
   for (const subdir of subdirs) {
     purgeOldTemporaryFiles(subdir, time);
-    fs.rmdirSync(subdir, {});
+    const filesnow = fs.filesin(subdir);
+    const dirsnow = fs.subdirs(subdir);
+    if ((filesnow.length + dirsnow.length) == 0) {
+      fs.rmdirSync(subdir, {});
+    }
   }
 }
