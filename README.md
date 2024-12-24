@@ -116,7 +116,9 @@ header-includes: |
 In Frege’s notation, a conditional is written like so:
 
 :::{.fregeify}
+$$
 \GGjudge\GGconditional{p}{q}
+$$
 :::
 
 ```
