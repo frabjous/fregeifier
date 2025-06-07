@@ -154,7 +154,7 @@ function makeImage(jobOpts, mathText, displayinline, ctr) {
     console.error('Fregeifier cropped PDF not found.');
     return null;
   }
-  let mutoolCmd = `mutool draw -F ${imageext} -o - ` +
+  let mutoolCmd = `mutool draw -F ${imageext} ` +
     ((imageext == 'svg') ? '' : '-r 100 ') +
     '"fregeifier_temporary_file_cropped.pdf" 1 > ' +
     `"${filename}"`;
