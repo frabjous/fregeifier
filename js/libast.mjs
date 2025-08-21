@@ -46,7 +46,7 @@ export function fregeifyAST(jobOpts, ast, active) {
       return imgObj;
     }
     // otherwise recurse
-    if ("c" in ast) {
+    if ((ast) && ("c" in ast)) {
       ast.c = fregeifyAST(jobOpts, ast.c, active)
     }
     return ast;
