@@ -155,8 +155,7 @@ function makeImage(jobOpts, mathText, displayinline, ctr) {
     return null;
   }
   let mutoolCmd = `mutool draw -F ${imageext} ` +
-    ((imageext == 'svg') ? '' : '-r 100 ') +
-    '-o - ' +
+    ((imageext == 'svg') ? '' : '-r 100 -o - ') +
     '"fregeifier_temporary_file_cropped.pdf" 1 > ' +
     `"${filename}"`;
   try {
