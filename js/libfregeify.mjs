@@ -19,11 +19,11 @@ function cleanUp(jobdir) {
 }
 
 function fillTemplate(template, vals) {
-    let doc = template;
-    for (const [key, v] of Object.entries(vals)) {
-      doc = doc.replaceAll('% FREGEIFIER:' + key, v);
-    }
-    return doc;
+  let doc = template;
+  for (const [key, v] of Object.entries(vals)) {
+    doc = doc.replaceAll('% FREGEIFIER:' + key, v);
+  }
+  return doc;
 }
 
 export function getImageFile(jobOpts, mathText, displayinline) {
